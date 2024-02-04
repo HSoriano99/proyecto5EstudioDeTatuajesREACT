@@ -10,9 +10,9 @@ import "./Header.css";
 export const Header = () => {
 
     //hardcodeamos nuestro token y decoded token para probar los diferentes enlaces
-    const token = 1;
+    const token = "";
     const decoded = {
-        role: "JULIO"
+
     };
 
   return (
@@ -23,11 +23,11 @@ export const Header = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="personajes">Personajes</Nav.Link>
+            <Nav.Link href="/artistas">Nuestros Artistas</Nav.Link>
             <NavDropdown title="Mi cuenta" id="basic-nav-dropdown">
               {!token ? (
                 <>
-                  <NavDropdown.Item href="#action/3.1">Login</NavDropdown.Item>
+                  <NavDropdown.Item href="/login ">Login</NavDropdown.Item>
                   <NavDropdown.Item href="register">
                     Resgistrarse
                   </NavDropdown.Item>
