@@ -3,11 +3,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CustomInput } from "../../components/LoginInput/LoginImput";
 import { clientRegister, userLogin } from "../../services/ApiCalls";
-import { userData } from "../userSlice";
+import { login, userData } from "../userSlice";
 import "./Register.css";
 
 export const Register = () => {
-  
   const [registerData, setRegisterData] = useState({
     username: "",
     email: "",
@@ -29,15 +28,15 @@ export const Register = () => {
     }));
   };
 
-  
   const buttonHandler = () => {
     const credentials = {
-        email: registerData.email,
-        password: registerData.password,
-    }
-    clientRegister(registerData);
+      email: registerData.email,
+      password: registerData.password,
+    };
 
-    //hacemos login con el usuario recien creado.
+    clientRegister(registerData).then(() => {
+
+         //hacemos login con el usuario recien creado.
     userLogin(credentials)
       .then((token) => {
         const decodedToken = jwtDecode(token);
@@ -51,6 +50,9 @@ export const Register = () => {
         dispatch(login({ credentials: data }));
       })
       .catch((err) => console.error("ha ocurrido un error", err));
+    });
+
+   
   };
 
   console.table(registerData);
