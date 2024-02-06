@@ -17,11 +17,19 @@ export const userSlice = createSlice({
                 ...state,
                 ...action.payload,
             }
-        }
+        },
+
+        logout: (state, action) => {
+            return {
+                ...state,
+                ...action.payload,
+                vecesLoginLogout: state.vecesLoginLogout +1
+            }
+        },
     }
 })
 
-export const { login } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 //creamos una función para extraer el nombre del pasillo del store
 export const userData = (state) => state.user;
 export default userSlice.reducer;

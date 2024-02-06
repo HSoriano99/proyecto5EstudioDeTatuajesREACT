@@ -15,7 +15,7 @@ export const Login = () => {
   const dispatch = useDispatch();
 
   // // instancio redux en modo lectura
-// const userRdxData = useSelector(userData)
+const userRdxData = useSelector(userData)
 
   const inputHandler = (event) => {
     setCredentials((prevState) => ({
@@ -25,7 +25,6 @@ export const Login = () => {
   };
 
   const buttonHandler = () => {
-    console.log(credentials);
     userLogin(credentials)
       .then((token) => {
         const decodedToken = jwtDecode(token);
@@ -38,7 +37,6 @@ export const Login = () => {
       })
       .catch((err) => console.error("ha ocurrido un error", err));
   };
-
  
   return (
     <div>

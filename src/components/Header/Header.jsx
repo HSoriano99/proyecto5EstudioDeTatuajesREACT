@@ -5,15 +5,26 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Header.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, userData } from "../../pages/userSlice";
 
 
 export const Header = () => {
 
-    //hardcodeamos nuestro token y decoded token para probar los diferentes enlaces
-    const token = "";
-    const decoded = {
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const userRdxData = useSelector(userData)
 
-    };
+  const token = userRdxData.credentials.token;
+  const decoded = userRdxData.credentials.userData;
+
+  const logMeOut = () => {
+    dispatch(logout({credentials: {}}))
+    setTimeout(() => {
+      navigate("/");
+    });
+  };
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary" id="navbar">
@@ -37,7 +48,7 @@ export const Header = () => {
                   <NavDropdown.Item href="profile">Perfil</NavDropdown.Item>
                   <NavDropdown.Item href="admin">Admin</NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => logMeOut()}>
                     Log out
                   </NavDropdown.Item>
                 </>
@@ -46,7 +57,7 @@ export const Header = () => {
                   <NavDropdown.Item href="profile">Perfil</NavDropdown.Item>
                   <NavDropdown.Item href="">Mis citas</NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => logMeOut()}>
                     Log out
                   </NavDropdown.Item>
                 </>
@@ -59,6 +70,3 @@ export const Header = () => {
   );
 };
 
-
-//function onClick de dropdown Logout
-// onClick={() => logMeOut()}
