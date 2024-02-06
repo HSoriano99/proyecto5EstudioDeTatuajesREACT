@@ -29,6 +29,7 @@ export const Register = () => {
   };
 
   const buttonHandler = () => {
+    //definimos las credenciales para el futuro login con los datos de registro
     const credentials = {
       email: registerData.email,
       password: registerData.password,
@@ -36,7 +37,7 @@ export const Register = () => {
 
     clientRegister(registerData).then(() => {
 
-         //hacemos login con el usuario recien creado.
+    //hacemos login con el usuario recien creado cuando tengamos la respuesta de nuestro registro
     userLogin(credentials)
       .then((token) => {
         const decodedToken = jwtDecode(token);
@@ -45,8 +46,7 @@ export const Register = () => {
           token: token,
           userData: decodedToken,
         };
-        //crear un slice coon un reducer de los datos de registro, no es necesario
-        //pero seguimos usando el reducer de login para hcer login al usuario recién creado
+        //guardamos al igual que en el login nuestros datos de usuario logeado 
         dispatch(login({ credentials: data }));
       })
       .catch((err) => console.error("ha ocurrido un error", err));
