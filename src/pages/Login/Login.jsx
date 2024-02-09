@@ -4,8 +4,10 @@ import { userLogin } from "../../services/ApiCalls";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { login, userData } from "../userSlice";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
+    const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -14,8 +16,8 @@ export const Login = () => {
   // instancio redux en modo escritura
   const dispatch = useDispatch();
 
-  // // instancio redux en modo lectura
-const userRdxData = useSelector(userData)
+  // instancio redux en modo lectura
+  const userRdxData = useSelector(userData);
 
   const inputHandler = (event) => {
     setCredentials((prevState) => ({
@@ -34,10 +36,11 @@ const userRdxData = useSelector(userData)
           userData: decodedToken,
         };
         dispatch(login({ credentials: data }));
+        navigate("/profile");
       })
       .catch((err) => console.error("ha ocurrido un error", err));
   };
- 
+
   return (
     <div>
       <CustomInput
@@ -52,8 +55,10 @@ const userRdxData = useSelector(userData)
         name={"password"}
         handler={inputHandler}
       ></CustomInput>
-      
-      <div className="apiCallButton" onClick={buttonHandler}>LOGIN</div>
+
+      <div className="apiCallButton" onClick={buttonHandler}>
+        LOGIN
+      </div>
     </div>
   );
 };

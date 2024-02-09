@@ -55,7 +55,7 @@ export const Header = () => {
               ) : (
                 <>
                   <NavDropdown.Item href="profile">Perfil</NavDropdown.Item>
-                  <NavDropdown.Item href="">Mis citas</NavDropdown.Item>
+                  {/* <NavDropdown.Item href="">Mis citas</NavDropdown.Item> */}
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={() => logMeOut()}>
                     Log out

@@ -1,12 +1,15 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { CustomInput } from "../../components/LoginInput/LoginImput";
 import { clientRegister, userLogin } from "../../services/ApiCalls";
 import { login, userData } from "../userSlice";
 import "./Register.css";
 
 export const Register = () => {
+
+    const navigate = useNavigate();
   const [registerData, setRegisterData] = useState({
     username: "",
     email: "",
@@ -46,9 +49,13 @@ export const Register = () => {
           token: token,
           userData: decodedToken,
         };
+        
         //guardamos al igual que en el login nuestros datos de usuario logeado 
         dispatch(login({ credentials: data }));
+        navigate("/profile");
+
       })
+
       .catch((err) => console.error("ha ocurrido un error", err));
     });
 

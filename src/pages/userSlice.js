@@ -23,7 +23,6 @@ export const userSlice = createSlice({
             return {
                 ...state,
                 ...action.payload,
-                vecesLoginLogout: state.vecesLoginLogout +1
             }
         },
     }
