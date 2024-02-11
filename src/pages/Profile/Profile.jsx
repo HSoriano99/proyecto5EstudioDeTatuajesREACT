@@ -15,7 +15,7 @@ export const Profile = () =>{
     
 
     const token = userRdxData.credentials.token;
-    const id = userRdxData.credentials.userData.userId
+    const id = userRdxData.credentials.userData?.userId;
 
      useEffect(() => {
         if (!token) {
@@ -27,20 +27,12 @@ export const Profile = () =>{
 
             }))
             getClientProfile(token,id).then((res) => {
-                console.table(res);
+                console.log(res);
                 setProfileData(res);
             })
+
         }
      }, []);
-
-    //  useEffect(() => {
-
-    //     if (!tokenData.id) {
-    //         console.log("hola")
-    //         navigate("/")
-    //     }
-
-    //  },[tokenData]);
 
 
    
