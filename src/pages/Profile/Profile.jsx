@@ -31,16 +31,6 @@ export const Profile = () => {
     }
   }, []);
 
-  //   useEffect (() => {
-  //     profileData.appointment?.map(() => ({
-  //         getArtistName(profileData.appointment?.).then((res) => {
-
-  //         });
-
-  //     }))
-
-  //   },[profileData])
-
   return (
     <div className="profileData">
       <h1>ESTOS SON LOS DETALLES DE TU PERFIL {profileData.first_name}</h1>
@@ -56,15 +46,18 @@ export const Profile = () => {
               <>
                 {profileData.appointment.map((appointment, index) => {
                   return (
-                    <ListGroup horizontal>
-                      <ListGroup.Item key={appointment[index]?.id}>
-                        {profileData.appointment[index]?.id}
+                    <ListGroup horizontal key={"cita" + index}>
+                      <ListGroup.Item key="nombre" >
+                        {profileData.appointment[index]?.artist.first_name}
                       </ListGroup.Item>
-                      <ListGroup.Item key={appointment[index]?.date}>
+                      <ListGroup.Item key="fecha">
                         {profileData.appointment[index]?.date}
                       </ListGroup.Item>
-                      <ListGroup.Item key={appointment[index]?.shift}>
+                      <ListGroup.Item key="turno">
                         {profileData.appointment[index]?.shift}
+                      </ListGroup.Item>
+                      <ListGroup.Item key="estilo">
+                        {profileData.appointment[index]?.artist.tattoo_style}
                       </ListGroup.Item>
                     </ListGroup>
                   );
