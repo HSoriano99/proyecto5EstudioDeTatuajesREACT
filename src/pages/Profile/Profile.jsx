@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getClientProfile } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -33,10 +36,16 @@ export const Profile = () => {
 
   return (
     <div className="profileData">
-      <h1>ESTOS SON LOS DETALLES DE TU PERFIL {profileData.first_name}</h1>
-      <h2>-Nombre de usuario: {profileData.username}</h2>
-      <h2>-Email: {profileData.email}</h2>
-      <h2>-Teléfono: {profileData.phone_number}</h2>
+        <Card>
+            <Card.Header as="h5">Estos son los datos de tu perfil {profileData.first_name}</Card.Header>
+            <Card.Body>
+                <Card.Title>{profileData.username}</Card.Title>
+                <Card.Text>Email: {profileData.email}</Card.Text>
+                <Card.Text>Teléfono: {profileData.phone_number}</Card.Text>
+                <Button variant="primary">Editar mis datos</Button>
+            </Card.Body>
+        </Card>
+
       <br></br>
       {profileData.appointment ? (
         <Accordion key="acc" defaultActiveKey="0">
