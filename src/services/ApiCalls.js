@@ -21,8 +21,20 @@ export const getClientProfile = async (token, id) => {
         }
     }
     const res = await axios.get(`${API_URL}/api/auth/getClientByUser/${id}`, config);
+    console.log(res.data);
     
     return res.data;
 
 };
+
+export const updateUser = async (token, id, data) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.patch(`${API_URL}/api/auth/update/${id}`, data, config);
+    console.log(res);
+    return res;
+}
 

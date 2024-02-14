@@ -4,15 +4,20 @@ import { Accordion } from "react-bootstrap";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getClientProfile } from "../../services/ApiCalls";
+import { getClientProfile, updateUser } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import { CustomInput } from "../../components/LoginInput/LoginImput";
+import "./Profile.css";
 
 
 export const Profile = () => {
   const navigate = useNavigate();
+  const [Editable, setEditable] = useState(false);
   const [profileData, setProfileData] = useState({});
+  const [userUpdate, setUserUpdate] = useState({});
+  const [clientUpdate, setClientUpdate] = useState ({});
   const [tokenData, setTokenData] = useState({});
   const userRdxData = useSelector(userData);
   const dispatch = useDispatch();
@@ -34,6 +39,31 @@ export const Profile = () => {
     }
   }, []);
 
+
+  const buttonHandlerEdit = () => {
+    setEditable(!Editable);
+  }
+
+  const buttonHandlerSave = () => {
+    updateUser(token, id, userUpdate).then((res) => {
+      setProfileData((prevState) => ({
+        ...prevState,
+        username: userUpdate.username,
+        email: userUpdate.email,
+      }))
+    });
+
+  }
+
+  const inputHandlerUser = (event) => {
+
+    setUserUpdate((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+
+  };
+
   return (
     <div className="profileData">
         <Card>
@@ -42,7 +72,31 @@ export const Profile = () => {
                 <Card.Title>{profileData.username}</Card.Title>
                 <Card.Text>Email: {profileData.email}</Card.Text>
                 <Card.Text>Teléfono: {profileData.phone_number}</Card.Text>
-                <Button variant="primary">Editar mis datos</Button>
+                <Button variant="primary" onClick={() => buttonHandlerEdit()}>Editar mis datos</Button>
+                {Editable 
+                ? (
+                  
+                  <div className="EditingData">
+                    <br></br>
+                  <CustomInput
+                    placeholder={"escriba su username"}
+                    type={"username"}
+                    name={"username"}
+                    handler={inputHandlerUser}
+                  ></CustomInput>
+                  <CustomInput
+                    placeholder={"escriba su email"}
+                    type={"email"}
+                    name={"email"}
+                    handler={inputHandlerUser}
+                  ></CustomInput>
+                  <br></br>
+                  <Button variant="secondary" onClick={() => buttonHandlerSave()} >Guardar cambios</Button>
+                </div>
+
+                ) : null }
+                
+
             </Card.Body>
         </Card>
 
