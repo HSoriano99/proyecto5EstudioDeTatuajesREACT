@@ -38,3 +38,14 @@ export const updateUser = async (token, id, data) => {
     return res;
 }
 
+export const updateClient = async (token, id, data) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.patch(`${API_URL}/api/auth/updateClient/user/${id}`, data, config);
+    console.log(res);
+    return res;
+}
+

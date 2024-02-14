@@ -4,7 +4,7 @@ import { Accordion } from "react-bootstrap";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getClientProfile, updateUser } from "../../services/ApiCalls";
+import { getClientProfile, updateClient, updateUser } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -45,11 +45,23 @@ export const Profile = () => {
   }
 
   const buttonHandlerSave = () => {
+    console.log(profileData);
+    console.log(userUpdate);
+    console.log(clientUpdate);
     updateUser(token, id, userUpdate).then((res) => {
       setProfileData((prevState) => ({
         ...prevState,
         username: userUpdate.username,
         email: userUpdate.email,
+      }))
+    });
+
+    updateClient(token, id, clientUpdate).then((res) => {
+      setProfileData((prevState) => ({
+        ...prevState,
+        first_name: clientUpdate.first_name,
+        last_name: clientUpdate.last_name,
+        phone_number: clientUpdate.phone_number,
       }))
     });
 
@@ -64,12 +76,28 @@ export const Profile = () => {
 
   };
 
+  const inputHandlerClient = (event) => {
+
+    setClientUpdate((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+
+  };
+
   return (
     <div className="profileData">
         <Card>
-            <Card.Header as="h5">Estos son los datos de tu perfil {profileData.first_name}</Card.Header>
+            <Card.Header as="h5">Estos son los datos de tu perfil <br></br>
+            {profileData.first_name}
+            </Card.Header>
             <Card.Body>
                 <Card.Title>{profileData.username}</Card.Title>
+                <Card.Text>Nombre: {profileData.first_name}</Card.Text>
+                {profileData.last_name? (
+                   <Card.Text>Apellido: {profileData.last_name}</Card.Text>
+                )
+                : null}
                 <Card.Text>Email: {profileData.email}</Card.Text>
                 <Card.Text>Teléfono: {profileData.phone_number}</Card.Text>
                 <Button variant="primary" onClick={() => buttonHandlerEdit()}>Editar mis datos</Button>
@@ -89,6 +117,25 @@ export const Profile = () => {
                     type={"email"}
                     name={"email"}
                     handler={inputHandlerUser}
+                  ></CustomInput>
+                  <br></br>
+                  <CustomInput
+                    placeholder={"escriba su nombre"}
+                    type={"first_name"}
+                    name={"first_name"}
+                    handler={inputHandlerClient}
+                  ></CustomInput>
+                  <CustomInput
+                    placeholder={"escriba su apellido"}
+                    type={"last_name"}
+                    name={"last_name"}
+                    handler={inputHandlerClient}
+                  ></CustomInput>
+                  <CustomInput
+                    placeholder={"escriba su teléfono"}
+                    type={"phone_number"}
+                    name={"phone_number"}
+                    handler={inputHandlerClient}
                   ></CustomInput>
                   <br></br>
                   <Button variant="secondary" onClick={() => buttonHandlerSave()} >Guardar cambios</Button>
