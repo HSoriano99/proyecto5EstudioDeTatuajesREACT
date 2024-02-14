@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Accordion } from "react-bootstrap";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getClientProfile, updateClient, updateUser } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import Button from "react-bootstrap/Button";
@@ -16,9 +16,8 @@ export const Profile = () => {
   const navigate = useNavigate();
   const [Editable, setEditable] = useState(false);
   const [profileData, setProfileData] = useState({});
-  const [userUpdate, setUserUpdate] = useState({});
-  const [clientUpdate, setClientUpdate] = useState ({});
-  const [tokenData, setTokenData] = useState({});
+  const [userUpdate, setUserUpdate] = useState({username: "", email: ""});
+  const [clientUpdate, setClientUpdate] = useState ({first_name: "", last_name: "", phone_number: ""});
   const userRdxData = useSelector(userData);
   const dispatch = useDispatch();
 
@@ -29,41 +28,50 @@ export const Profile = () => {
     if (!token) {
       navigate("/register");
     } else {
-      setTokenData((prevState) => ({
-        ...prevState,
-        [id]: id,
-      }));
       getClientProfile(token, id).then((res) => {
         setProfileData(res);
       });
     }
   }, []);
-
+   
+  useEffect(()=>{
+    console.log(profileData)
+  },[profileData])
 
   const buttonHandlerEdit = () => {
     setEditable(!Editable);
   }
 
   const buttonHandlerSave = () => {
-    console.log(profileData);
-    console.log(userUpdate);
-    console.log(clientUpdate);
+    //Gestionar que no se envien claves vacías a la llamada.
+
+    userUpdate.username = userUpdate.username || profileData.username,
+    userUpdate.email = userUpdate.email || profileData.email,
+
+    clientUpdate.first_name = clientUpdate.first_name || profileData.first_name,
+    clientUpdate.last_name = clientUpdate.last_name || profileData.last_name,
+    clientUpdate.phone_number = clientUpdate.phone_number || profileData.phone_number,
+
+    //----------------------------------------------------------------
+
     updateUser(token, id, userUpdate).then((res) => {
       setProfileData((prevState) => ({
         ...prevState,
-        username: userUpdate.username,
-        email: userUpdate.email,
+        username: userUpdate.username || profileData.username,
+        email: userUpdate.email || profileData.email,
       }))
     });
 
     updateClient(token, id, clientUpdate).then((res) => {
       setProfileData((prevState) => ({
         ...prevState,
-        first_name: clientUpdate.first_name,
-        last_name: clientUpdate.last_name,
-        phone_number: clientUpdate.phone_number,
+        first_name: clientUpdate.first_name || profileData.first_name,
+        last_name: clientUpdate.last_name || profileData.last_name,
+        phone_number: clientUpdate.phone_number || profileData.phone_number,
       }))
     });
+
+    setEditable(false);
 
   }
 
