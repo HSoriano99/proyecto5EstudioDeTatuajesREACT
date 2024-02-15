@@ -8,6 +8,7 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, userData } from "../../pages/userSlice";
+import { useEffect } from "react";
 
 
 export const Header = () => {
@@ -17,7 +18,8 @@ export const Header = () => {
   const userRdxData = useSelector(userData)
 
   const token = userRdxData.credentials.token;
-  const decoded = userRdxData.credentials.userData;
+  const decoded = userRdxData.credentials?.userData;
+
 
   const logMeOut = () => {
     dispatch(logout({credentials: {}}))
@@ -43,7 +45,7 @@ export const Header = () => {
                     Resgistrarse
                   </NavDropdown.Item>
                 </>
-              ) : decoded.role === "ADMIN" ? (
+              ) : decoded.userRoles === "admin" ? (
                 <>
                   <NavDropdown.Item href="profile">Perfil</NavDropdown.Item>
                   <NavDropdown.Item href="admin">Admin</NavDropdown.Item>

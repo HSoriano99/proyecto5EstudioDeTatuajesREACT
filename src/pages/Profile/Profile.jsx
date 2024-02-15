@@ -23,6 +23,7 @@ export const Profile = () => {
 
   const token = userRdxData.credentials.token;
   const id = userRdxData.credentials.userData?.userId;
+  const decoded = userRdxData.credentials?.userData;
 
   useEffect(() => {
     if (!token) {
@@ -34,9 +35,6 @@ export const Profile = () => {
     }
   }, []);
    
-  useEffect(()=>{
-    console.log(profileData)
-  },[profileData])
 
   const buttonHandlerEdit = () => {
     setEditable(!Editable);
@@ -96,9 +94,15 @@ export const Profile = () => {
   return (
     <div className="profileData">
         <Card>
+          {decoded.userRoles === "admin"? (
+            <Card.Header as="h5">Estos son los datos de tu perfil de administrador <br></br>
+            {profileData.first_name}
+            </Card.Header>
+          ):
             <Card.Header as="h5">Estos son los datos de tu perfil <br></br>
             {profileData.first_name}
             </Card.Header>
+          }
             <Card.Body>
                 <Card.Title>{profileData.username}</Card.Title>
                 <Card.Text>Nombre: {profileData.first_name}</Card.Text>
@@ -156,7 +160,7 @@ export const Profile = () => {
         </Card>
 
       <br></br>
-      {profileData.appointment ? (
+      {profileData.appointment === 0? (
         <Accordion key="acc" defaultActiveKey="0">
           <Accordion.Item key="item" eventKey="0">
             <Accordion.Header key="header">Mis Citas</Accordion.Header>
