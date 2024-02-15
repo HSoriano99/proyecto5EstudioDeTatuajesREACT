@@ -28,10 +28,13 @@ export const Profile = () => {
   useEffect(() => {
     if (!token) {
       navigate("/register");
-    } else if (decoded?.userRoles !== "client" || "admin"){
+    } else if (decoded?.userRoles === "client" || decoded?.userRoles === "admin"){
       getClientProfile(token, id).then((res) => {
         setProfileData(res);
       });
+      //Crear endpoint en el back para traer datos del artista
+    } else {
+      navigate("/");
     }
   }, []);
    

@@ -60,7 +60,6 @@ export const Login = () => {
         name={"email"}
         handler={inputHandler}
       ></CustomInput>
-
       <CustomInput
         placeholder={"escriba su contraseña"}
         type={"password"}
