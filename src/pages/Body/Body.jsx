@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom"
+import { Admin } from "../Admin/Admin"
 import { Home } from "../Home/Home"
 import { Login } from "../Login/Login"
 import { NuestrosArtistas } from "../NuestrosArtistas/NuestrosArtistas"
@@ -16,6 +17,8 @@ export const Body = () =>{
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/admin" element={<Admin />} />
+
             </Routes>
         </>
     )

@@ -28,7 +28,7 @@ export const Profile = () => {
   useEffect(() => {
     if (!token) {
       navigate("/register");
-    } else {
+    } else if (decoded?.userRoles !== "client" || "admin"){
       getClientProfile(token, id).then((res) => {
         setProfileData(res);
       });
@@ -94,7 +94,7 @@ export const Profile = () => {
   return (
     <div className="profileData">
         <Card>
-          {decoded.userRoles === "admin"? (
+          {decoded?.userRoles === "admin"? (
             <Card.Header as="h5">Estos son los datos de tu perfil de administrador <br></br>
             {profileData.first_name}
             </Card.Header>
@@ -112,7 +112,7 @@ export const Profile = () => {
                 : null}
                 <Card.Text>Email: {profileData.email}</Card.Text>
                 <Card.Text>Teléfono: {profileData.phone_number}</Card.Text>
-                <Button variant="primary" onClick={() => buttonHandlerEdit()}>Editar mis datos</Button>
+                <Button variant="dark" onClick={() => buttonHandlerEdit()}>Editar mis datos</Button>
                 {Editable 
                 ? (
                   
@@ -150,7 +150,7 @@ export const Profile = () => {
                     handler={inputHandlerClient}
                   ></CustomInput>
                   <br></br>
-                  <Button variant="secondary" onClick={() => buttonHandlerSave()} >Guardar cambios</Button>
+                  <Button variant="dark" onClick={() => buttonHandlerSave()} >Guardar cambios</Button>
                 </div>
 
                 ) : null }

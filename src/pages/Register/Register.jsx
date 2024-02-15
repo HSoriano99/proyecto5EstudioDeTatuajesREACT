@@ -6,6 +6,7 @@ import { CustomInput } from "../../components/LoginInput/LoginImput";
 import { clientRegister, userLogin } from "../../services/ApiCalls";
 import { login, userData } from "../userSlice";
 import "./Register.css";
+import Button from "react-bootstrap/Button";
 
 export const Register = () => {
 
@@ -65,8 +66,16 @@ export const Register = () => {
   console.table(registerData);
 
   return (
-    <div className="register">
-      <CustomInput
+    <div className="RegisterDiv">
+
+      <div className="TituloRegister">
+        <h1>REGÍSTRATE CON NOSOTROS</h1>
+      </div>
+
+      <br></br>
+
+      <div className="RegisterForm">
+        <CustomInput
         placeholder={"escriba un nickname"}
         type={"username"}
         name={"username"}
@@ -96,10 +105,12 @@ export const Register = () => {
         name={"phone_number"}
         handler={inputHandler}
       ></CustomInput>
-
-      <div className="apiCallButton" onClick={buttonHandler}>
-        CREAR PERFIL!
       </div>
+      
+      <br></br>
+
+      <Button variant="dark" onClick={() => buttonHandler()} >CREAR PERFIL</Button>
+      
     </div>
   );
 };
