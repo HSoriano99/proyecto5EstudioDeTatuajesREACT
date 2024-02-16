@@ -14,6 +14,12 @@ export const clientRegister = async (registerData) => {
 
 };
 
+export const getArtists = async () => {
+    const res = await axios.get(`${API_URL}/api/auth/getAllArtists`);
+    return res.data;
+
+};
+
 export const getClientProfile = async (token, id) => {
     const config = {
         headers: {
