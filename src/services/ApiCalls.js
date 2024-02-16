@@ -26,6 +26,18 @@ export const getClientProfile = async (token, id) => {
 
 };
 
+export const getArtistProfile = async (token, id) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.get(`${API_URL}/api/auth/getArtistByUser/${id}`, config);
+    
+    return res.data;
+
+};
+
 export const updateUser = async (token, id, data) => {
     const config = {
         headers: {
@@ -44,6 +56,17 @@ export const updateClient = async (token, id, data) => {
         }
     }
     const res = await axios.patch(`${API_URL}/api/auth/updateClient/user/${id}`, data, config);
+    console.log(res);
+    return res;
+}
+
+export const updateArtist = async (token, id, data) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.patch(`${API_URL}/api/auth/updateArtist/user/${id}`, data, config);
     console.log(res);
     return res;
 }

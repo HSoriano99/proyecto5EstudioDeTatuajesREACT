@@ -4,7 +4,7 @@ import { Accordion } from "react-bootstrap";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getClientProfile, updateClient, updateUser } from "../../services/ApiCalls";
+import { getArtistProfile, getClientProfile, updateArtist, updateClient, updateUser } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -18,12 +18,16 @@ export const Profile = () => {
   const [profileData, setProfileData] = useState({});
   const [userUpdate, setUserUpdate] = useState({username: "", email: ""});
   const [clientUpdate, setClientUpdate] = useState ({first_name: "", last_name: "", phone_number: ""});
+  const [artistUpdate, setArtistUpdate] = useState ({first_name: "", last_name: "", 
+  phone_number: "", tattoo_style: ""});
   const userRdxData = useSelector(userData);
   const dispatch = useDispatch();
+  const [Citas, setCitas] = useState(false)
 
   const token = userRdxData.credentials.token;
   const id = userRdxData.credentials.userData?.userId;
   const decoded = userRdxData.credentials?.userData;
+  
 
   useEffect(() => {
     if (!token) {
@@ -31,20 +35,30 @@ export const Profile = () => {
     } else if (decoded?.userRoles === "client" || decoded?.userRoles === "admin"){
       getClientProfile(token, id).then((res) => {
         setProfileData(res);
+        if (res.appointment.length > 0) {
+          setCitas(true)
+        }
       });
-      //Crear endpoint en el back para traer datos del artista
     } else {
-      navigate("/");
+      getArtistProfile(token, id).then((res) => {
+        setProfileData(res);
+        if (res.appointment.length > 0) {
+          setCitas(true)
+        }
+      })
     }
   }, []);
    
 
   const buttonHandlerEdit = () => {
     setEditable(!Editable);
+    console.log(profileData)
   }
 
   const buttonHandlerSave = () => {
-    //Gestionar que no se envien claves vacías a la llamada.
+
+    if (decoded?.userRoles === "client" || decoded?.userRoles === "admin") {
+       //Gestionar que no se envien claves vacías a la llamada.
 
     userUpdate.username = userUpdate.username || profileData.username,
     userUpdate.email = userUpdate.email || profileData.email,
@@ -74,10 +88,44 @@ export const Profile = () => {
 
     setEditable(false);
 
+
+    } else {
+       //Gestionar que no se envien claves vacías a la llamada.
+
+    userUpdate.username = userUpdate.username || profileData.username,
+    userUpdate.email = userUpdate.email || profileData.email,
+
+    artistUpdate.first_name = artistUpdate.first_name || profileData.first_name,
+    artistUpdate.last_name = artistUpdate.last_name || profileData.last_name,
+    artistUpdate.phone_number = artistUpdate.phone_number || profileData.phone_number,
+    artistUpdate.tattoo_style = artistUpdate.tattoo_style || profileData.tattoo_style,
+
+    //----------------------------------------------------------------
+
+    updateUser(token, id, userUpdate).then((res) => {
+      setProfileData((prevState) => ({
+        ...prevState,
+        username: userUpdate.username || profileData.username,
+        email: userUpdate.email || profileData.email,
+      }))
+    });
+
+    updateArtist(token, id, artistUpdate).then((res) => {
+      setProfileData((prevState) => ({
+        ...prevState,
+        first_name: artistUpdate.first_name || profileData.first_name,
+        last_name: artistUpdate.last_name || profileData.last_name,
+        phone_number: artistUpdate.phone_number || profileData.phone_number,
+        tattoo_style: artistUpdate.tattoo_style || profileData.tattoo_style,
+      }))
+    });
+
+    setEditable(false);
+
+    }
   }
 
   const inputHandlerUser = (event) => {
-
     setUserUpdate((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
@@ -85,12 +133,19 @@ export const Profile = () => {
 
   };
 
-  const inputHandlerClient = (event) => {
+  const inputHandlerClientArtist = (event) => {
+    if (decoded?.userRoles === "client" || decoded?.userRoles === "admin") {
+      setClientUpdate((prevState) => ({
+            ...prevState,
+            [event.target.name]: event.target.value,
+          }));
+    }else {
+      setArtistUpdate((prevState) => ({
+        ...prevState,
+        [event.target.name]: event.target.value,
+      }));
 
-    setClientUpdate((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }));
+    }
 
   };
 
@@ -111,6 +166,10 @@ export const Profile = () => {
                 <Card.Text>Nombre: {profileData.first_name}</Card.Text>
                 {profileData.last_name? (
                    <Card.Text>Apellido: {profileData.last_name}</Card.Text>
+                )
+                : null}
+                 {profileData.tattoo_style? (
+                   <Card.Text>Estilo: {profileData.tattoo_style}</Card.Text>
                 )
                 : null}
                 <Card.Text>Email: {profileData.email}</Card.Text>
@@ -138,19 +197,29 @@ export const Profile = () => {
                     placeholder={"escriba su nombre"}
                     type={"first_name"}
                     name={"first_name"}
-                    handler={inputHandlerClient}
+                    handler={inputHandlerClientArtist}
                   ></CustomInput>
+                  {profileData.tattoo_style? (
+                   <CustomInput
+                   placeholder={"escriba su estilo de tatuaje"}
+                   type={"tattoo_style"}
+                   name={"tattoo_style"}
+                   handler={inputHandlerClientArtist}
+                 ></CustomInput>
+                  )
+                  : null}
+                  
                   <CustomInput
                     placeholder={"escriba su apellido"}
                     type={"last_name"}
                     name={"last_name"}
-                    handler={inputHandlerClient}
+                    handler={inputHandlerClientArtist}
                   ></CustomInput>
                   <CustomInput
                     placeholder={"escriba su teléfono"}
                     type={"phone_number"}
                     name={"phone_number"}
-                    handler={inputHandlerClient}
+                    handler={inputHandlerClientArtist}
                   ></CustomInput>
                   <br></br>
                   <Button variant="dark" onClick={() => buttonHandlerSave()} >Guardar cambios</Button>
@@ -163,31 +232,58 @@ export const Profile = () => {
         </Card>
 
       <br></br>
-      {profileData.appointment === 0? (
+      {Citas === true? (
         <Accordion key="acc" defaultActiveKey="0">
           <Accordion.Item key="item" eventKey="0">
             <Accordion.Header key="header">Mis Citas</Accordion.Header>
             <Accordion.Body key="body">
-              <>
-                {profileData.appointment.map((appointment, index) => {
-                  return (
-                    <ListGroup horizontal key={"cita" + index}>
-                      <ListGroup.Item key="nombre" >
-                        {profileData.appointment[index]?.artist.first_name}
-                      </ListGroup.Item>
-                      <ListGroup.Item key="fecha">
-                        {profileData.appointment[index]?.date}
-                      </ListGroup.Item>
-                      <ListGroup.Item key="turno">
-                        {profileData.appointment[index]?.shift}
-                      </ListGroup.Item>
-                      <ListGroup.Item key="estilo">
-                        {profileData.appointment[index]?.artist.tattoo_style}
-                      </ListGroup.Item>
-                    </ListGroup>
-                  );
-                })}
-              </>
+              {decoded?.userRoles === "client" ? (
+                 <>
+                 {profileData.appointment.map((appointment, index) => {
+                   return (
+                     <ListGroup horizontal key={"cita" + index}>
+                       <ListGroup.Item key="nombre" >
+                         Artista: {profileData.appointment[index]?.artist.first_name}
+                       </ListGroup.Item>
+                       <ListGroup.Item key="fecha">
+                         Fecha: {profileData.appointment[index]?.date}
+                       </ListGroup.Item>
+                       <ListGroup.Item key="turno">
+                         Turno: {profileData.appointment[index]?.shift}
+                       </ListGroup.Item>
+                       <ListGroup.Item key="estilo">
+                         Tatuaje: {profileData.appointment[index]?.artist.tattoo_style}
+                       </ListGroup.Item>
+                     </ListGroup>
+                   );
+                 })}
+               </>
+
+              ) : null}
+              {decoded?.userRoles === "artist" ? (
+                 <>
+                 {profileData.appointment.map((appointment, index) => {
+                   return (
+                     <ListGroup horizontal key={"cita" + index}>
+                       <ListGroup.Item key="nombre" >
+                         Cliente: {profileData.appointment[index]?.client.first_name}
+                       </ListGroup.Item>
+                       <ListGroup.Item key="clientPhone">
+                         Tlf. cliente: {profileData.appointment[index]?.client.phone_number}
+                       </ListGroup.Item>
+                       <ListGroup.Item key="fecha">
+                         Fecha: {profileData.appointment[index]?.date}
+                       </ListGroup.Item>
+                       <ListGroup.Item key="turno">
+                         Turno: {profileData.appointment[index]?.shift}
+                       </ListGroup.Item>
+                     </ListGroup>
+                   );
+                 })}
+               </>
+
+              ) : null}
+             
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
