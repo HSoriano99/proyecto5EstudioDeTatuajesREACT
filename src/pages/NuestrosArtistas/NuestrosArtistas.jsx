@@ -5,6 +5,7 @@ import { getArtists } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import "./NuestrosArtistas.css"
 
 
 export const NuestrosArtistas = () =>{
@@ -29,26 +30,27 @@ export const NuestrosArtistas = () =>{
 
 
     return (
-        <>
-        <h1>HOLA! ESTOS SON NUESTROS ARTISTAS</h1>
-        {Artists.map((artist, i)=>{
-            return (
-                
-                <Card key={i} style={{ width: '18rem' }}>
-                <Card.Img variant="top" src="holder.js/100px180" />
-                <Card.Body>
-                  <Card.Title>{Artists[i]?.first_name}</Card.Title>
-                  <Card.Text>{Artists[i]?.last_name}</Card.Text>
-                  <Card.Text>{Artists[i]?.phone_number}</Card.Text>
-                  <Card.Text>{Artists[i]?.tattoo_style}</Card.Text>
-                  <Button variant="dark">Go somewhere</Button>
-                </Card.Body>
-              </Card>
-            )
-        })}
+        <div className="artistPage">
+            <div className="pageTitle">
+                <h1>ESTOS SON NUESTROS ARTISTAS</h1>
+            </div>
+            <div className="artistDiv">
+                 {Artists.map((artist, i)=>{
+                    return (
+                        <Card className="artistcard" key={i} >
+                            <Card.Img variant="top" src={Artists[i]?.profile_image} />
+                            <Card.Body>
+                                <Card.Title>{Artists[i]?.first_name}</Card.Title>
+                                <Card.Text>{Artists[i]?.last_name}</Card.Text>
+                                <Card.Text>{Artists[i]?.phone_number}</Card.Text>
+                                <Card.Text>{Artists[i]?.tattoo_style}</Card.Text>
+                                <Button variant="dark">Go somewhere</Button>
+                            </Card.Body>
+                         </Card>
+                        )
+                    })}
+            </div>
         
-        
-        
-        </>
+        </div>
     )
 }
