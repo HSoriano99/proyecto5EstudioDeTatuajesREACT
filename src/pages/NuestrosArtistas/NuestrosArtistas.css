@@ -14,7 +14,6 @@
 }
 
 .artistDiv {
-    width: 20em;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,8 +23,11 @@
 
 .artistcard {
     width: 20em;
-
-
-    
-
+    height: fit-content;
 }
+
+.artistimg {
+    height: 15em;
+}
+
+

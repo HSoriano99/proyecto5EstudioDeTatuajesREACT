@@ -38,7 +38,7 @@ export const NuestrosArtistas = () =>{
                  {Artists.map((artist, i)=>{
                     return (
                         <Card className="artistcard" key={i} >
-                            <Card.Img variant="top" src={Artists[i]?.profile_image} />
+                            <Card.Img className="artistimg" variant="top" src={Artists[i]?.profile_image} />
                             <Card.Body>
                                 <Card.Title>{Artists[i]?.first_name}</Card.Title>
                                 <Card.Text>{Artists[i]?.last_name}</Card.Text>
