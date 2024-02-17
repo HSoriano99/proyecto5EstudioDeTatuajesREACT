@@ -13,8 +13,6 @@ export const Admin = () =>{
     const token = userRdxData.credentials.token;
     const decoded = userRdxData.credentials?.userData;
 
-    
-
     useEffect(() => {
         if (decoded?.userRoles !== "admin") {
             navigate("/")
@@ -23,7 +21,6 @@ export const Admin = () =>{
             console.log(token);
 
         }
-           
       }, []);
 
 
