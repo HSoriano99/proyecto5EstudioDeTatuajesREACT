@@ -193,7 +193,6 @@ export const Profile = () => {
                     name={"email"}
                     handler={inputHandlerUser}
                   ></CustomInput>
-                  <br></br>
                   <CustomInput
                     placeholder={"escriba su nombre"}
                     type={"first_name"}
@@ -236,7 +235,13 @@ export const Profile = () => {
 
       {decoded?.userRoles === "client" ? (
         <div className="newCitaButton">
-        <Button variant="dark" onClick={() => buttonHandlerSave()} >Crear cita nueva</Button>
+        <Button className="buttonCita" variant="secondary" href="/artists" >Crea una cita nueva!</Button>
+        </div>
+      ): null}
+
+      {decoded?.userRoles === "admin" ? (
+        <div className="newCitaButton">
+        <Button className="buttonCita" variant="secondary" href="/admin" >ACCEDE A GESTIÓN DEL ESTUDIO</Button>
         </div>
       ): null}
 

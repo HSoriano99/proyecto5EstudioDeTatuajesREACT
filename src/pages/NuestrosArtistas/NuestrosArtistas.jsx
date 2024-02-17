@@ -44,7 +44,7 @@ export const NuestrosArtistas = () =>{
                                 <Card.Text>{Artists[i]?.last_name}</Card.Text>
                                 <Card.Text>Tlf. contacto: {Artists[i]?.phone_number}</Card.Text>
                                 <Card.Text>Estilo: {Artists[i]?.tattoo_style}</Card.Text>
-                                {token? (
+                                {decoded?.userRoles === "client" ? (
                                     <Button variant="dark">Pedir Cita</Button>
                                 ): null }
                                 

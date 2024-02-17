@@ -1,6 +1,7 @@
 .EditingData {
     display: flex;
     flex-direction: column;
+    gap: 0.5em;
 }
 
 .profileData {
@@ -15,4 +16,14 @@
 .citasDiv {
     width: 20em;
     flex-wrap: wrap;
+}
+
+
+.buttonCita {
+    width: 20em;
+}
+
+.accordion-button:not(.collapsed) {
+    color: white;
+    background-color: #212529;
 }
