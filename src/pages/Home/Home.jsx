@@ -16,6 +16,7 @@ export const Home = () =>{
                     <h1>BIENVENIDO A HÉCTOR'S TATTOO</h1>
                     <br></br>
                 </div>
+                <div className="bloquesDiv">
                 <div className="Bloque1">
                     <img className="Imagen1" src="https://radtattoocompany.com/wp-content/uploads/2024/01/DSC_2811.jpg" alt="ImagenEstudio1" />
                     <br></br>
@@ -35,6 +36,7 @@ export const Home = () =>{
                     </div>
             
 
+                </div>
                 </div>
         
              </div>

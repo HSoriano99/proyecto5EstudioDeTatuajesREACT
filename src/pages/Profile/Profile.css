@@ -2,3 +2,17 @@
     display: flex;
     flex-direction: column;
 }
+
+.profileData {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.citasDiv {
+    width: 20em;
+    flex-wrap: wrap;
+}

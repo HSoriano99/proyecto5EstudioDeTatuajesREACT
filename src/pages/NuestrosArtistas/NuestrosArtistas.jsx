@@ -42,9 +42,12 @@ export const NuestrosArtistas = () =>{
                             <Card.Body>
                                 <Card.Title>{Artists[i]?.first_name}</Card.Title>
                                 <Card.Text>{Artists[i]?.last_name}</Card.Text>
-                                <Card.Text>{Artists[i]?.phone_number}</Card.Text>
-                                <Card.Text>{Artists[i]?.tattoo_style}</Card.Text>
-                                <Button variant="dark">Go somewhere</Button>
+                                <Card.Text>Tlf. contacto: {Artists[i]?.phone_number}</Card.Text>
+                                <Card.Text>Estilo: {Artists[i]?.tattoo_style}</Card.Text>
+                                {token? (
+                                    <Button variant="dark">Pedir Cita</Button>
+                                ): null }
+                                
                             </Card.Body>
                          </Card>
                         )

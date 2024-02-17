@@ -233,16 +233,27 @@ export const Profile = () => {
         </Card>
 
       <br></br>
+
+      {decoded?.userRoles === "client" ? (
+        <div className="newCitaButton">
+        <Button variant="dark" onClick={() => buttonHandlerSave()} >Crear cita nueva</Button>
+        </div>
+      ): null}
+
+      <br></br>
+
       {Citas === true? (
+        <div className="citasDiv">
         <Accordion key="acc" defaultActiveKey="0">
           <Accordion.Item key="item" eventKey="0">
-            <Accordion.Header key="header">Mis Citas</Accordion.Header>
+            <Accordion.Header key="header" >Mis Citas</Accordion.Header>
             <Accordion.Body key="body">
               {decoded?.userRoles === "client" ? (
-                 <>
+                 <div className="citasCards">
                  {profileData.appointment.map((appointment, index) => {
                    return (
-                     <ListGroup horizontal key={"cita" + index}>
+                    <div className="cita" key={"cita" + index}>
+                     <ListGroup>
                        <ListGroup.Item key="nombre" >
                          Artista: {profileData.appointment[index]?.artist.first_name}
                        </ListGroup.Item>
@@ -256,16 +267,20 @@ export const Profile = () => {
                          Tatuaje: {profileData.appointment[index]?.artist.tattoo_style}
                        </ListGroup.Item>
                      </ListGroup>
+                     <br></br>
+                     </div>
                    );
                  })}
-               </>
+                 
+                 </div>
 
               ) : null}
               {decoded?.userRoles === "artist" ? (
-                 <>
+                 <div className="citasCards">
                  {profileData.appointment.map((appointment, index) => {
                    return (
-                     <ListGroup horizontal key={"cita" + index}>
+                    <div className="cita" key={"cita" + index}>
+                     <ListGroup key={"cita" + index}>
                        <ListGroup.Item key="nombre" >
                          Cliente: {profileData.appointment[index]?.client.first_name}
                        </ListGroup.Item>
@@ -279,15 +294,18 @@ export const Profile = () => {
                          Turno: {profileData.appointment[index]?.shift}
                        </ListGroup.Item>
                      </ListGroup>
+                     <br></br>
+                     </div>
                    );
                  })}
-               </>
+                 </div>
 
               ) : null}
              
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
+        </div>
       ) : null}
     </div>
   );
