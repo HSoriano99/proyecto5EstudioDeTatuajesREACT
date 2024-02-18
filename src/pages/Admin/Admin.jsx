@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getUsersPaginated } from "../../services/ApiCalls";
+import { getAppointmentsPaginated, getUsersPaginated } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import { Accordion } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
@@ -19,9 +19,15 @@ export const Admin = () =>{
     const decoded = userRdxData.credentials?.userData;
 
     const [Users, setUsers] = useState([]);
-    const [page, setPage] = useState(1);
-    const [skip, setSkip] = useState(3);
-    const [count, setCount] = useState();
+    const [usersPage, setUsersPage] = useState(1);
+    const [usersSkip, setUsersSkip] = useState(3);
+    const [usersCount, setUsersCount] = useState();
+
+    const [Citas, setCitas] = useState([]);
+    const [citasPage, setCitasPage] = useState(1);
+    const [citasSkip, setCitasSkip] = useState(3);
+    const [citasCount, setCitasCount] = useState();
+
 
 
     useEffect(() => {
@@ -29,15 +35,58 @@ export const Admin = () =>{
             navigate("/")
 
         } else {
-            getUsersPaginated(token, page, skip).then((res)=> {
-                console.log(res)
+            getUsersPaginated(token, usersPage, usersSkip).then((res)=> {
                 setUsers(res.results);
-                setPage(res.page);
-                setSkip(res.skip);
-                setCount(res.count);
+                setUsersPage(res.page);
+                setUsersSkip(res.skip);
+                setUsersCount(res.count);
+            })
+
+            getAppointmentsPaginated(token, citasPage, citasSkip).then((res)=> {
+                console.log(res);
+                setCitas(res.results);
+                setCitasPage(res.page);
+                setCitasSkip(res.skip);
+                setCitasCount(res.count);
+               
             })
         }
       }, []);
+
+    const buttonHandlerPrev = () => {
+        if (usersPage <= 1) {
+            null
+        } else {
+            const page = usersPage - 1;
+
+            getUsersPaginated(token, page, usersSkip).then((res)=> {
+                setUsers(res.results);
+                setUsersPage(res.page);
+                setUsersSkip(res.skip);
+                setUsersCount(res.count);
+            })
+    
+        };
+    }
+
+    const buttonHandlerNext = () => {
+        if (usersSkip * usersPage > usersCount) {
+            null
+        } else {
+            const page = usersPage + 1;
+
+            getUsersPaginated(token, page, usersSkip).then((res)=> {
+                setUsers(res.results);
+                setUsersPage(res.page);
+                setUsersSkip(res.skip);
+                setUsersCount(res.count);
+            })
+    
+        };
+    }
+
+
+
 
 
 
@@ -76,7 +125,7 @@ export const Admin = () =>{
                             ): null}
                    
                             {decoded?.userRoles === "admin" ? (
-                                <Button variant="dark">BORRAR USUARIO</Button>
+                                <Button variant="dark">ELIMINAR USUARIO</Button>
                             ): null }
                             
                         </Card.Body>
@@ -84,8 +133,51 @@ export const Admin = () =>{
                     )})}
 
                         <div className="buttonsDivSip">
-                            <div className="buttonPrevSup"><Button variant="secondary">PREV</Button></div>
-                            <div className="buttonPrevSup"><Button variant="secondary">NEXT</Button></div>
+                            <div className="buttonPage"><Button variant="secondary"
+                            onClick={() => buttonHandlerPrev()}>Prev Page</Button></div>
+                            <div className="buttonPage"><Button variant="secondary"
+                            onClick={() => buttonHandlerNext()}>Next Page</Button></div>
+                        </div>
+
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+        </div>
+
+        <div className="usersDiv">
+            <Accordion key="acc">
+                <Accordion.Item key="item" eventKey="0">
+                    <Accordion.Header key="header" className="headerAcc" >Citas del estudio</Accordion.Header>
+                    <Accordion.Body key="body" className="bodyAcc">
+                    {Citas.map((cita, i)=>{
+                    return (
+                    <Card className="usercard" key={i} >
+                        <Card.Body>
+                            <Card.Title>{Citas[i]?.date}</Card.Title>
+                            <Card.Text>Turno: 
+                                {Citas[i]?.shift === "morning"? (
+                                    " Mañana"
+                                ):null}
+                                {Citas[i]?.shift === "afternoon"? (
+                                    " Tarde"
+                                ):null}
+                            </Card.Text>
+                            <Card.Text>Artista: {Citas[i]?.artist.first_name}</Card.Text>
+                            <Card.Text>Client: {Citas[i]?.client.first_name}</Card.Text>
+                   
+                            {decoded?.userRoles === "admin" ? (
+                                <Button variant="dark">ELIMINAR CITA</Button>
+                            ): null }
+                            
+                        </Card.Body>
+                     </Card>
+                    )})}
+
+                        <div className="buttonsDivSip">
+                            <div className="buttonPage"><Button variant="secondary"
+                            >Prev Page</Button></div>
+                            <div className="buttonPage"><Button variant="secondary"
+                            >Next Page</Button></div>
                         </div>
 
                     </Accordion.Body>

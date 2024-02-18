@@ -81,7 +81,17 @@ export const getUsersPaginated = async (token, page, skip) => {
         }
     }
     const res = await axios.get(`${API_URL}/api/users/getAllPaginated?page=${page}&skip=${skip}`, config);
-    console.log(res.data);
+    return res.data;
+
+};
+
+export const getAppointmentsPaginated = async (token, page, skip) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.get(`${API_URL}/api/appointments/getAllPaginated?page=${page}&skip=${skip}`, config);
     return res.data;
 
 };

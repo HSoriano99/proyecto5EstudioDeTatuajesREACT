@@ -247,7 +247,7 @@ export const Profile = () => {
 
       <br></br>
 
-      {Citas === true? (
+      {Citas === true && decoded?.userRoles !== "admin"? (
         <div className="citasDiv">
         <Accordion key="acc" >
           <Accordion.Item key="item" eventKey="0">
