@@ -154,12 +154,12 @@ export const Profile = () => {
     <div className="profileData">
         <Card>
           {decoded?.userRoles === "admin"? (
-            <Card.Header as="h5">Estos son los datos de tu perfil de administrador <br></br>
-            {profileData.first_name}
+            <Card.Header as="h5">Estos son los datos de tu perfil de administrador 
+            { " " + profileData.first_name}
             </Card.Header>
           ):
-            <Card.Header as="h5">Estos son los datos de tu perfil <br></br>
-            {profileData.first_name}
+            <Card.Header as="h5">Estos son los datos de tu perfil 
+            { " " + profileData.first_name}
             </Card.Header>
           }
             <Card.Body>
@@ -249,7 +249,7 @@ export const Profile = () => {
 
       {Citas === true? (
         <div className="citasDiv">
-        <Accordion key="acc" defaultActiveKey="0">
+        <Accordion key="acc" >
           <Accordion.Item key="item" eventKey="0">
             <Accordion.Header key="header" >Mis Citas</Accordion.Header>
             <Accordion.Body key="body">

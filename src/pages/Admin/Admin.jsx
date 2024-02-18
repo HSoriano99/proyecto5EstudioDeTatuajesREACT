@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getUsersPaginated } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
+import { Accordion } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import "./Admin.css"
@@ -49,8 +50,12 @@ export const Admin = () =>{
             <h1>GESTIÓN DEL ESTUDIO</h1>
         </div>
         <div className="usersDiv">
-             {Users.map((user, i)=>{
-                return (
+            <Accordion key="acc">
+                <Accordion.Item key="item" eventKey="0">
+                    <Accordion.Header key="header" className="headerAcc" >Usuarios de la app</Accordion.Header>
+                    <Accordion.Body key="body" className="bodyAcc">
+                    {Users.map((user, i)=>{
+                    return (
                     <Card className="usercard" key={i} >
                         <Card.Body>
                             <Card.Title>{Users[i]?.username}</Card.Title>
@@ -76,8 +81,16 @@ export const Admin = () =>{
                             
                         </Card.Body>
                      </Card>
-                    )
-                })}
+                    )})}
+
+                        <div className="buttonsDivSip">
+                            <div className="buttonPrevSup"><Button variant="secondary">PREV</Button></div>
+                            <div className="buttonPrevSup"><Button variant="secondary">NEXT</Button></div>
+                        </div>
+
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
         </div>
     
     </div>

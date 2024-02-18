@@ -15,23 +15,37 @@
 }
 
 .usersDiv {
+    width: 20em;
+    flex-wrap: wrap;
+}
+
+.headerAcc{
+    width: 100%;
+}
+
+.bodyAcc {
     display: flex;
-    flex-wrap: wrap; /* Permitir que las tarjetas se envuelvan en pantallas pequeñas */
+    flex-direction: column;
     justify-content: center;
-    gap: 2em;
+    align-items: center;
+    gap: 0.5em;
 }
 
 .usercard {
     width: calc(33.33% - 4em); /* Utilizar un tercio del ancho del contenedor con un espacio entre tarjetas */
-    min-width: 20em; /* Ancho minimo para evitar que las tarjetas se vuelvan demasiado grandes */
+    min-width: 18em; /* Ancho minimo para evitar que las tarjetas se vuelvan demasiado grandes */
     flex: 1; /* Permitir que las tarjetas se ajusten según el espacio disponible */
+  
 }
 
-@media (max-width:800px) {
-    .artistDiv {
-        flex-direction: column;
-        align-items: center;
-                
-    }
+.buttonsDivSip {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
 }
+
+
 
