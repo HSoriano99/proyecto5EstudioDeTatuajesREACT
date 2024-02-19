@@ -69,6 +69,24 @@ export const Admin = () =>{
         };
     }
 
+    const buttonHandlerPrevCitas = () => {
+        if (citasPage <= 1) {
+            null
+        } else {
+            const page = citasPage - 1;
+
+            getAppointmentsPaginated(token, page, citasSkip).then((res)=> {
+                console.log(res);
+                setCitas(res.results);
+                setCitasPage(res.page);
+                setCitasSkip(res.skip);
+                setCitasCount(res.count);
+            })
+    
+        };
+    }
+
+
     const buttonHandlerNext = () => {
         if (usersSkip * usersPage > usersCount) {
             null
@@ -85,13 +103,22 @@ export const Admin = () =>{
         };
     }
 
+    const buttonHandlerNextCitas = () => {
+        if (citasSkip * citasPage > citasCount) {
+            null
+        } else {
+            const page = citasPage + 1;
 
-
-
-
-
-
-
+            getAppointmentsPaginated(token, page, citasSkip).then((res)=> {
+                console.log(res);
+                setCitas(res.results);
+                setCitasPage(res.page);
+                setCitasSkip(res.skip);
+                setCitasCount(res.count);
+            })
+    
+        };
+    }
 
     return (
         <div className="adminPage">
@@ -175,8 +202,10 @@ export const Admin = () =>{
 
                         <div className="buttonsDivSip">
                             <div className="buttonPage"><Button variant="secondary"
+                            onClick={() => buttonHandlerPrevCitas()}
                             >Prev Page</Button></div>
                             <div className="buttonPage"><Button variant="secondary"
+                            onClick={() => buttonHandlerNextCitas()}
                             >Next Page</Button></div>
                         </div>
 
