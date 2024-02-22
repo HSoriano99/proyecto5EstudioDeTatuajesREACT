@@ -95,3 +95,14 @@ export const getAppointmentsPaginated = async (token, page, skip) => {
     return res.data;
 
 };
+
+export const deleteAppointment = async (token, id) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.delete(`${API_URL}/api/appointments/delete/${id}`, config);
+    return res;
+
+};

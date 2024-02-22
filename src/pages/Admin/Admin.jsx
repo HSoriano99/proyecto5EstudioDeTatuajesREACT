@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAppointmentsPaginated, getUsersPaginated } from "../../services/ApiCalls";
+import { deleteAppointment, getAppointmentsPaginated, getUsersPaginated } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import { Accordion } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
@@ -27,6 +27,8 @@ export const Admin = () =>{
     const [citasPage, setCitasPage] = useState(1);
     const [citasSkip, setCitasSkip] = useState(3);
     const [citasCount, setCitasCount] = useState();
+
+    const [mensaje, setMensaje] = useState('');
 
 
 
@@ -104,7 +106,7 @@ export const Admin = () =>{
     }
 
     const buttonHandlerNextCitas = () => {
-        if (citasSkip * citasPage > citasCount) {
+        if (citasSkip * citasPage >= citasCount) {
             null
         } else {
             const page = citasPage + 1;
@@ -119,6 +121,21 @@ export const Admin = () =>{
     
         };
     }
+
+    const buttonHandlerDeleteCitas = (i) => {
+        const id = i;
+        deleteAppointment(token, id).then((res)=> {
+            setTimeout(() => {
+                getAppointmentsPaginated(token, citasPage, citasSkip).then((res)=> {
+                    console.log(res);
+                    setCitas(res.results);
+                    setCitasPage(res.page);
+                    setCitasSkip(res.skip);
+                    setCitasCount(res.count);
+                })
+              }, 200); //Temporizador para recargar el componente con los citas actualizadas tras 200ms para que no sea demasiado brusco
+        });
+    };
 
     return (
         <div className="adminPage">
@@ -152,7 +169,7 @@ export const Admin = () =>{
                             ): null}
                    
                             {decoded?.userRoles === "admin" ? (
-                                <Button variant="dark">ELIMINAR USUARIO</Button>
+                                <Button variant="dark"  >ELIMINAR USUARIO</Button>
                             ): null }
                             
                         </Card.Body>
@@ -193,7 +210,13 @@ export const Admin = () =>{
                             <Card.Text>Client: {Citas[i]?.client.first_name}</Card.Text>
                    
                             {decoded?.userRoles === "admin" ? (
-                                <Button variant="dark">ELIMINAR CITA</Button>
+                                <div className="buttonCitas">
+                               
+                                <Button variant="dark" onClick={() => buttonHandlerDeleteCitas(Citas[i]?.id)} >ELIMINAR CITA</Button>
+                               
+                                {/* <Button variant="dark">MODIFICAR CITA</Button> */}
+                                {/* Posible funcionalidad futura */}
+                                </div>
                             ): null }
                             
                         </Card.Body>
@@ -208,6 +231,8 @@ export const Admin = () =>{
                             onClick={() => buttonHandlerNextCitas()}
                             >Next Page</Button></div>
                         </div>
+
+                    
 
                     </Accordion.Body>
                 </Accordion.Item>
