@@ -106,3 +106,14 @@ export const deleteAppointment = async (token, id) => {
     return res;
 
 };
+
+export const deleteUser = async (token, id) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.delete(`${API_URL}/api/users/delete/${id}`, config);
+    return res;
+
+};

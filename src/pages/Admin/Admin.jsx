@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteAppointment, getAppointmentsPaginated, getUsersPaginated } from "../../services/ApiCalls";
+import { deleteAppointment, deleteUser, getAppointmentsPaginated, getUsersPaginated } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import { Accordion } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
@@ -28,8 +28,6 @@ export const Admin = () =>{
     const [citasSkip, setCitasSkip] = useState(3);
     const [citasCount, setCitasCount] = useState();
 
-    const [mensaje, setMensaje] = useState('');
-
 
 
     useEffect(() => {
@@ -45,7 +43,6 @@ export const Admin = () =>{
             })
 
             getAppointmentsPaginated(token, citasPage, citasSkip).then((res)=> {
-                console.log(res);
                 setCitas(res.results);
                 setCitasPage(res.page);
                 setCitasSkip(res.skip);
@@ -78,7 +75,6 @@ export const Admin = () =>{
             const page = citasPage - 1;
 
             getAppointmentsPaginated(token, page, citasSkip).then((res)=> {
-                console.log(res);
                 setCitas(res.results);
                 setCitasPage(res.page);
                 setCitasSkip(res.skip);
@@ -90,7 +86,7 @@ export const Admin = () =>{
 
 
     const buttonHandlerNext = () => {
-        if (usersSkip * usersPage > usersCount) {
+        if (usersSkip * usersPage >= usersCount) {
             null
         } else {
             const page = usersPage + 1;
@@ -112,7 +108,6 @@ export const Admin = () =>{
             const page = citasPage + 1;
 
             getAppointmentsPaginated(token, page, citasSkip).then((res)=> {
-                console.log(res);
                 setCitas(res.results);
                 setCitasPage(res.page);
                 setCitasSkip(res.skip);
@@ -125,15 +120,30 @@ export const Admin = () =>{
     const buttonHandlerDeleteCitas = (i) => {
         const id = i;
         deleteAppointment(token, id).then((res)=> {
+            setCitasCount(citasCount - 1);
             setTimeout(() => {
                 getAppointmentsPaginated(token, citasPage, citasSkip).then((res)=> {
-                    console.log(res);
                     setCitas(res.results);
                     setCitasPage(res.page);
                     setCitasSkip(res.skip);
                     setCitasCount(res.count);
                 })
               }, 200); //Temporizador para recargar el componente con los citas actualizadas tras 200ms para que no sea demasiado brusco
+        });
+    };
+
+    const buttonHandlerDeleteUsers = (i) => {
+        const id = i;
+        deleteUser(token, id).then((res)=> {
+            setUsersCount(usersCount - 1);
+            setTimeout(() => {
+                getUsersPaginated(token, usersPage, usersSkip).then((res)=> {
+                    setUsers(res.results);
+                    setUsersPage(res.page);
+                    setUsersSkip(res.skip);
+                    setUsersCount(res.count);
+                })
+              }, 200); //Temporizador para recargar el componente con los usuarios actualizados tras 200ms para que no sea demasiado brusco
         });
     };
 
@@ -149,6 +159,7 @@ export const Admin = () =>{
                     <Accordion.Body key="body" className="bodyAcc">
                     {Users.map((user, i)=>{
                     return (
+                    
                     <Card className="usercard" key={i} >
                         <Card.Body>
                             <Card.Title>{Users[i]?.username}</Card.Title>
@@ -168,8 +179,8 @@ export const Admin = () =>{
                                          <Card.Text>Tlf. contacto: {Users[i]?.artist.phone_number}</Card.Text>
                             ): null}
                    
-                            {decoded?.userRoles === "admin" ? (
-                                <Button variant="dark"  >ELIMINAR USUARIO</Button>
+                            {decoded?.userRoles === "admin" && Users[i]?.role.role_name !== "admin" ? (
+                                <Button variant="dark" onClick={() => buttonHandlerDeleteUsers(Users[i]?.id)} >ELIMINAR USUARIO</Button>
                             ): null }
                             
                         </Card.Body>
