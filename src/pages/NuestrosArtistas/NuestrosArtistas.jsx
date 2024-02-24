@@ -6,6 +6,7 @@ import { userData } from "../userSlice";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+import Dropdown from 'react-bootstrap/Dropdown';
 import { CustomInput } from "../../components/LoginInput/LoginImput";
 import "./NuestrosArtistas.css"
 
@@ -15,7 +16,14 @@ export const NuestrosArtistas = () =>{
     const userRdxData = useSelector(userData);
     const [Artists, setArtists] = useState([]);
     const [PedirCita, setPedirCita] = useState(0);
-
+    const [dateConfirmation, setDateConfirmation] = useState(false);
+    const [appointmentData, setAppointmentData] = useState({
+        client_id: "",
+        artist_id: "",
+        shift: "",
+        date: ""
+      });
+    
 
     const token = userRdxData.credentials.token;
     const id = userRdxData.credentials.userData?.userId;
@@ -29,16 +37,52 @@ export const NuestrosArtistas = () =>{
 
     useEffect(() => {
 
-        console.log( "Soy mis artistas ", Artists )
-    },[Artists]);
+        console.log( appointmentData )
+    },[appointmentData]);
+
+    useEffect(() => {
+
+        console.log( dateConfirmation )
+    },[dateConfirmation]);
 
     const buttonHandlerNewDate = (id) => {
+        setDateConfirmation(false)
+        setAppointmentData({
+        client_id: "",
+        artist_id: "",
+        shift: "",
+        date: ""
+        }); 
+
         if (PedirCita > 0) {
             setPedirCita(0);
         } else if (PedirCita === 0) {
             setPedirCita(id)
         }
-      }
+    }
+
+    const shiftHandler = (e) => {
+        const shift = e.shift;
+        console.log(shift)
+        setAppointmentData((prevState) => ({
+          ...prevState,
+          "shift": shift
+        }));
+
+        if (appointmentData.date !== "") {
+            setDateConfirmation(true)
+        } else {
+            null
+        }
+    };
+
+    const dateHandler = (event) => {
+        setAppointmentData((prevState) => ({
+          ...prevState,
+          [event.target.name]: event.target.value,
+        }));
+    };
+    
 
 
     return (
@@ -65,21 +109,50 @@ export const NuestrosArtistas = () =>{
                                 ): null }
                                 </div>
                                 {PedirCita !== 0 && PedirCita === Artists[i]?.id && decoded?.userRoles === "client"? (
-                                    <div className="newAppoitnment">
-                                        <div className="tituloNewAppoitnment">
-                                            <h5>CUANDO QUIERES VENIR?</h5>
-                                        </div>
-                                        <div className="appointmentForm">
-                                            <Form.Select aria-label="Default select example">
-                                                <option>Por la mañana o por la tarde?</option>
-                                                <option value="morning">Mañana</option>
-                                                <option value="afternoon">Tarde</option>
-                                            </Form.Select>
-                                        </div>
-
-
+                                    
+                                    <div className="appointmentForm">
+                                        {dateConfirmation === true ? (
+                                            <div className="confirmationDate">
+                                            <h3 className="titleConfirmation">Confirmar cita para el día {appointmentData.date} por la
+                                            {appointmentData.shift === "morning" ? (" mañana "): null}
+                                            {appointmentData.shift === "afternoon" ? (" tarde "): null}
+                                            con {Artists[i]?.first_name }
+                                            </h3> 
+                                            <Button variant="success" onClick={() => buttonHandler()} >Confirmar</Button>
+                                             </div>
+                                        ): null}
+                                   
+                                        {dateConfirmation === false ? (
+                                            <div className="appointmentForm">
+                                                <h3>Cuándo quieres venir?</h3>
+                                                <Form.Group controlId="date">
+                                                    <Form.Control
+                                                        type="date"
+                                                        name="date"
+                                                        value={appointmentData.date}
+                                                        onChange={dateHandler}
+                                                    />
+                                                </Form.Group>
+                                                <Dropdown>
+                                                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                                                    Por la mañana o tarde?
+                                                    </Dropdown.Toggle>
+                                                    <Dropdown.Menu className="bg-dropdown">
+                                                        <Dropdown.Item name="shift" value="morning" onClick={(e) => 
+                                                        shiftHandler({shift: e.target.getAttribute("value")
+                                                        })}
+                                                        >Mañana</Dropdown.Item>
+                                                        <Dropdown.Item name="shift" value="afternoon" onClick={(e) => 
+                                                        shiftHandler({shift: e.target.getAttribute("value")
+                                                        })}
+                                                        >Tarde</Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+                                            </div>
+                                        ): null}
+                                        
+                                       
                                     </div>
-
 
                                 ): null }
                                 

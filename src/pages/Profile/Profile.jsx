@@ -34,7 +34,6 @@ export const Profile = () => {
       navigate("/register");
     } else if (decoded?.userRoles === "client" || decoded?.userRoles === "admin"){
       getClientProfile(token, id).then((res) => {
-        console.log(res);
         setProfileData(res);
         if (res.appointment.length > 0) {
           setCitas(true)
