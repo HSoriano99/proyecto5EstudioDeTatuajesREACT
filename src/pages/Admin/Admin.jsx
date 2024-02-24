@@ -180,7 +180,7 @@ export const Admin = () =>{
                             ): null}
                    
                             {decoded?.userRoles === "admin" && Users[i]?.role.role_name !== "admin" ? (
-                                <Button variant="dark" onClick={() => buttonHandlerDeleteUsers(Users[i]?.id)} >ELIMINAR USUARIO</Button>
+                                <Button variant="danger" onClick={() => buttonHandlerDeleteUsers(Users[i]?.id)} >ELIMINAR USUARIO</Button>
                             ): null }
                             
                         </Card.Body>
@@ -223,7 +223,7 @@ export const Admin = () =>{
                             {decoded?.userRoles === "admin" ? (
                                 <div className="buttonCitas">
                                
-                                <Button variant="dark" onClick={() => buttonHandlerDeleteCitas(Citas[i]?.id)} >ELIMINAR CITA</Button>
+                                <Button variant="danger" onClick={() => buttonHandlerDeleteCitas(Citas[i]?.id)} >ELIMINAR CITA</Button>
                                
                                 {/* <Button variant="dark">MODIFICAR CITA</Button> */}
                                 {/* Posible funcionalidad futura */}

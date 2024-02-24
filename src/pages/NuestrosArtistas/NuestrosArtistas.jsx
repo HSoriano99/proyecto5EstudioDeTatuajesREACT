@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getArtists } from "../../services/ApiCalls";
+import { createNewAppointment, getArtists, getClientProfile } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -16,6 +17,7 @@ export const NuestrosArtistas = () =>{
     const userRdxData = useSelector(userData);
     const [Artists, setArtists] = useState([]);
     const [PedirCita, setPedirCita] = useState(0);
+    const [smShow, setSmShow] = useState(false);
     const [dateConfirmation, setDateConfirmation] = useState(false);
     const [appointmentData, setAppointmentData] = useState({
         client_id: "",
@@ -28,11 +30,18 @@ export const NuestrosArtistas = () =>{
     const token = userRdxData.credentials.token;
     const id = userRdxData.credentials.userData?.userId;
     const decoded = userRdxData.credentials?.userData;
+    
 
     useEffect(() => {
         getArtists().then((res) => {
             setArtists(res)
         })
+        getClientProfile(token, id).then((res) => {
+            setAppointmentData((prevState) => ({
+                ...prevState,
+                "client_id": res.id
+              }));
+        });
       }, []);
 
     useEffect(() => {
@@ -46,13 +55,12 @@ export const NuestrosArtistas = () =>{
     },[dateConfirmation]);
 
     const buttonHandlerNewDate = (id) => {
+        const artistId = id;
         setDateConfirmation(false)
-        setAppointmentData({
-        client_id: "",
-        artist_id: "",
-        shift: "",
-        date: ""
-        }); 
+        setAppointmentData((prevState) => ({
+            ...prevState,
+            "artist_id": artistId
+          }));
 
         if (PedirCita > 0) {
             setPedirCita(0);
@@ -82,6 +90,16 @@ export const NuestrosArtistas = () =>{
           [event.target.name]: event.target.value,
         }));
     };
+
+    const buttonHandlerCreateAppointment = () => {
+        createNewAppointment(token, appointmentData).then((res) => {
+            console.log(res)
+            setPedirCita(0)
+            setSmShow(true)
+            // navigate("/profile");
+        });
+
+    };
     
 
 
@@ -90,6 +108,27 @@ export const NuestrosArtistas = () =>{
             <div className="pageTitle">
                 <h1>ESTOS SON NUESTROS ARTISTAS</h1>
             </div>
+            <div className="modal">
+            <Modal
+                size="sm"
+                show={smShow}
+                onHide={() => setSmShow(false)}
+                aria-labelledby="example-modal-sizes-title-sm"
+            >
+                <Modal.Header closeButton>
+                <Modal.Title id="example-modal-sizes-title-sm">
+                    Cita creada correctamente!
+                </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Vas a tatuarte más o quieres ver tus citas confirmadas?
+                </Modal.Body>
+                <div className="modalButtons">
+                <Button variant="secondary" href="/profile" >MIS CITAS</Button>
+                <Button variant="dark" onClick={() => setSmShow(false)} >MÁS TINTA</Button>
+                </div>
+            </Modal>
+            </div>
             <div className="artistDiv">
                  {Artists.map((artist, i)=>{
                     return (
@@ -97,33 +136,49 @@ export const NuestrosArtistas = () =>{
                             <Card.Img className="artistimg" variant="top" src={Artists[i]?.profile_image} />
                             <Card.Body className="bodyCard">
                                 <div className="artistData">
-                                <Card.Title>{Artists[i]?.first_name}</Card.Title>
-                                <Card.Text>{Artists[i]?.last_name}</Card.Text>
-                                <Card.Text>Tlf. contacto: {Artists[i]?.phone_number}</Card.Text>
-                                <Card.Text>Estilo: {Artists[i]?.tattoo_style}</Card.Text>
-                                {decoded?.userRoles === "client" && PedirCita === 0  ? (
-                                    <Button variant="dark" onClick={() => buttonHandlerNewDate(Artists[i]?.id)}  >Pedir Cita</Button>
-                                ): null }
-                                {decoded?.userRoles === "client" && PedirCita !== 0 && PedirCita === Artists[i]?.id ? (
-                                    <Button variant="dark" onClick={() => buttonHandlerNewDate(Artists[i]?.id)}  >Otra vez será</Button>
-                                ): null }
+
+                                    <Card.Title>{Artists[i]?.first_name}</Card.Title>
+                                    <Card.Text>{Artists[i]?.last_name}</Card.Text>
+                                    <Card.Text>Tlf. contacto: {Artists[i]?.phone_number}</Card.Text>
+                                    <Card.Text>Estilo: {Artists[i]?.tattoo_style}</Card.Text>
+
+                                    {decoded?.userRoles === "client" && PedirCita === 0  ? (
+                                        <Button variant="success" 
+                                        onClick={() => buttonHandlerNewDate(Artists[i]?.id)}  >Pedir Cita</Button>
+                                    ): null }
+
+                                    {decoded?.userRoles === "client" && PedirCita !== 0 && PedirCita === Artists[i]?.id ?(
+                                        <Button variant="danger" 
+                                        onClick={() => buttonHandlerNewDate(Artists[i]?.id)}  >Otra vez será</Button>
+                                    ): null }
+                                    
                                 </div>
+
                                 {PedirCita !== 0 && PedirCita === Artists[i]?.id && decoded?.userRoles === "client"? (
                                     
                                     <div className="appointmentForm">
+
                                         {dateConfirmation === true ? (
+
                                             <div className="confirmationDate">
-                                            <h3 className="titleConfirmation">Confirmar cita para el día {appointmentData.date} por la
-                                            {appointmentData.shift === "morning" ? (" mañana "): null}
-                                            {appointmentData.shift === "afternoon" ? (" tarde "): null}
-                                            con {Artists[i]?.first_name }
-                                            </h3> 
-                                            <Button variant="success" onClick={() => buttonHandler()} >Confirmar</Button>
-                                             </div>
+
+                                                <h3 className="titleConfirmation">Confirmar cita para el día         {appointmentData.date} por la
+                                                    {appointmentData.shift === "morning" ? (" mañana "): null}
+                                                    {appointmentData.shift === "afternoon" ? (" tarde "): null}
+                                                    con {Artists[i]?.first_name }
+                                                </h3> 
+
+                                                <Button variant="success" 
+                                                onClick={() => buttonHandlerCreateAppointment()} >Confirmar</Button>
+
+                                            </div>
+
                                         ): null}
                                    
                                         {dateConfirmation === false ? (
+
                                             <div className="appointmentForm">
+
                                                 <h3>Cuándo quieres venir?</h3>
                                                 <Form.Group controlId="date">
                                                     <Form.Control
@@ -148,6 +203,7 @@ export const NuestrosArtistas = () =>{
                                                         >Tarde</Dropdown.Item>
                                                     </Dropdown.Menu>
                                                 </Dropdown>
+
                                             </div>
                                         ): null}
                                         

@@ -117,3 +117,14 @@ export const deleteUser = async (token, id) => {
     return res;
 
 };
+
+export const createNewAppointment = async (token, appointmentData) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.post(`${API_URL}/api/appointments/newAppointment`, appointmentData, config);
+    return res;
+
+};

@@ -234,13 +234,13 @@ export const Profile = () => {
 
       {decoded?.userRoles === "client" ? (
         <div className="newCitaButton">
-        <Button className="buttonCita" variant="secondary" href="/artists" >Crea una cita nueva!</Button>
+        <Button className="buttonCita" variant="success" href="/artists" >Crea una cita nueva!</Button>
         </div>
       ): null}
 
       {decoded?.userRoles === "admin" ? (
         <div className="newCitaButton">
-        <Button className="buttonCita" variant="secondary" href="/admin" >ACCEDE A GESTIÓN DEL ESTUDIO</Button>
+        <Button className="buttonCita" variant="success" href="/admin" >ACCEDE A GESTIÓN DEL ESTUDIO</Button>
         </div>
       ): null}
 

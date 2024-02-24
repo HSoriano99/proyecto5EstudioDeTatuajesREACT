@@ -67,6 +67,15 @@
     text-align: center;
 }
 
+.modalButtons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    margin-bottom: 2em;
+}
+
 
 
 
