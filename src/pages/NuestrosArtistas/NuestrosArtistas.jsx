@@ -43,17 +43,7 @@ export const NuestrosArtistas = () =>{
               }));
         });
       }, []);
-
-    useEffect(() => {
-
-        console.log( appointmentData )
-    },[appointmentData]);
-
-    useEffect(() => {
-
-        console.log( dateConfirmation )
-    },[dateConfirmation]);
-
+    
     const buttonHandlerNewDate = (id) => {
         const artistId = id;
         setDateConfirmation(false)
@@ -71,7 +61,6 @@ export const NuestrosArtistas = () =>{
 
     const shiftHandler = (e) => {
         const shift = e.shift;
-        console.log(shift)
         setAppointmentData((prevState) => ({
           ...prevState,
           "shift": shift

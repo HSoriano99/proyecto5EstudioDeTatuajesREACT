@@ -63,8 +63,6 @@ export const Register = () => {
    
   };
 
-  console.table(registerData);
-
   return (
     <div className="RegisterDiv">
 

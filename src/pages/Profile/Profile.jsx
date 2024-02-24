@@ -52,7 +52,6 @@ export const Profile = () => {
 
   const buttonHandlerEdit = () => {
     setEditable(!Editable);
-    console.log(profileData)
   }
 
   const buttonHandlerSave = () => {
