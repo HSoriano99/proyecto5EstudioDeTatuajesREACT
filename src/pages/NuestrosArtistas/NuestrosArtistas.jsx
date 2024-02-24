@@ -93,10 +93,13 @@ export const NuestrosArtistas = () =>{
 
     const buttonHandlerCreateAppointment = () => {
         createNewAppointment(token, appointmentData).then((res) => {
-            console.log(res)
             setPedirCita(0)
-            setSmShow(true)
-            // navigate("/profile");
+            if (res.status === 201) {
+                setSmShow(true)
+            } else if (res.status !== 201) {
+                //futura gestión de errores por implementar
+                alert("Error creando la cita")
+            }
         });
 
     };
