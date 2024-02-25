@@ -52,5 +52,11 @@
     display: flex;
     flex-direction: row;
     gap: 0.5em;
+    
 }
 
+
+
+.appointmentForm {
+    margin-top: 0.5em;
+}

@@ -6,6 +6,8 @@ import { userData } from "../userSlice";
 import { Accordion } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import Dropdown from 'react-bootstrap/Dropdown';
 import "./Admin.css"
 
 
@@ -28,6 +30,13 @@ export const Admin = () =>{
     const [citasSkip, setCitasSkip] = useState(3);
     const [citasCount, setCitasCount] = useState();
 
+    const [appointmentData, setAppointmentData] = useState({
+        shift: "",
+        date: ""
+      });
+
+    const [Modif, setModif] = useState(false);
+    const [ModifCita, setModifCita] = useState(null);
 
 
     useEffect(() => {
@@ -121,7 +130,10 @@ export const Admin = () =>{
         const id = i;
         deleteAppointment(token, id).then((res)=> {
             setCitasCount(citasCount - 1);
+            
             setTimeout(() => {
+                setModif(!Modif)
+                setModifCita(null)
                 getAppointmentsPaginated(token, citasPage, citasSkip).then((res)=> {
                     setCitas(res.results);
                     setCitasPage(res.page);
@@ -130,6 +142,7 @@ export const Admin = () =>{
                 })
               }, 200); //Temporizador para recargar el componente con los citas actualizadas tras 200ms para que no sea demasiado brusco
         });
+        
     };
 
     const buttonHandlerDeleteUsers = (i) => {
@@ -145,6 +158,32 @@ export const Admin = () =>{
                 })
               }, 200); //Temporizador para recargar el componente con los usuarios actualizados tras 200ms para que no sea demasiado brusco
         });
+    };
+
+    const buttonHandlerModif = (id) => {
+        setModif(!Modif);
+
+        if (ModifCita === null) {
+            setModifCita(id);
+        } else if (ModifCita !== null) {
+            setModifCita(null)
+        }
+        
+    }
+
+    const dateHandler = (event) => {
+        setAppointmentData((prevState) => ({
+          ...prevState,
+          [event.target.name]: event.target.value,
+        }));
+    };
+
+    const shiftHandler = (e) => {
+        const shift = e.shift;
+        setAppointmentData((prevState) => ({
+          ...prevState,
+          "shift": shift
+        }));
     };
 
     return (
@@ -190,7 +229,7 @@ export const Admin = () =>{
                         <div className="buttonsDivSip">
                             <div className="buttonPage"><Button variant="secondary"
                             onClick={() => buttonHandlerPrev()}>Prev Page</Button></div>
-                            <div className="buttonPage"><Button variant="secondary"
+                            <div className="buttonPage"><Button variant="primary"
                             onClick={() => buttonHandlerNext()}>Next Page</Button></div>
                         </div>
 
@@ -222,14 +261,49 @@ export const Admin = () =>{
                    
                             {decoded?.userRoles === "admin" ? (
                                 <div className="buttonCitas">
-                               
-                                <Button variant="danger" onClick={() => buttonHandlerDeleteCitas(Citas[i]?.id)} >ELIMINAR CITA</Button>
-                               
-                                {/* <Button variant="dark">MODIFICAR CITA</Button> */}
-                                {/* Posible funcionalidad futura */}
+                                    {Modif !== false? (
+                                        <Button variant="success" onClick={() => buttonHandlerModif(Citas[i]?.id)}>ATRÁS</Button> 
+                                    ):null}
+                                    {Modif === false? (
+                                        <Button variant="success" onClick={() => buttonHandlerModif(Citas[i]?.id)}>MODIFICAR CITA</Button> 
+                                    ):null}
+                                
                                 </div>
                             ): null }
                             
+                            {Modif === true && ModifCita === Citas[i]?.id ? (
+                                <div className="appointmentForm">
+                                <Form.Group controlId="date">
+                                    <Form.Control
+                                        type="date"
+                                        name="date"
+                                        value={appointmentData.date}
+                                        onChange={dateHandler}
+                                    />
+                                </Form.Group>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                                    Turno?
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="bg-dropdown">
+                                        <Dropdown.Item name="shift" value="morning" onClick={(e) => 
+                                        shiftHandler({shift: e.target.getAttribute("value")
+                                        })}
+                                        >Mañana</Dropdown.Item>
+                                        <Dropdown.Item name="shift" value="afternoon" onClick={(e) => 
+                                        shiftHandler({shift: e.target.getAttribute("value")
+                                        })}
+                                        >Tarde</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                
+                                <Button variant="danger" onClick={() => buttonHandlerDeleteCitas(Citas[i]?.id)} >ELIMINAR CITA</Button>
+                               
+
+                            </div>
+
+                            ) : null}
+
                         </Card.Body>
                      </Card>
                     )})}
@@ -238,7 +312,7 @@ export const Admin = () =>{
                             <div className="buttonPage"><Button variant="secondary"
                             onClick={() => buttonHandlerPrevCitas()}
                             >Prev Page</Button></div>
-                            <div className="buttonPage"><Button variant="secondary"
+                            <div className="buttonPage"><Button variant="primary"
                             onClick={() => buttonHandlerNextCitas()}
                             >Next Page</Button></div>
                         </div>

@@ -36,12 +36,15 @@ export const NuestrosArtistas = () =>{
         getArtists().then((res) => {
             setArtists(res)
         })
-        getClientProfile(token, id).then((res) => {
+        if (token) {
+             getClientProfile(token, id).then((res) => {
             setAppointmentData((prevState) => ({
                 ...prevState,
                 "client_id": res.id
               }));
         });
+        }
+       
       }, []);
     
     const buttonHandlerNewDate = (id) => {
