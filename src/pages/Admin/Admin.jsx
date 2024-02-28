@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteAppointment, deleteUser, getAppointmentsPaginated, getUsersPaginated } from "../../services/ApiCalls";
+import { deleteAppointment, deleteUser, getAppointmentsPaginated, getUsersPaginated, modifAppointment } from "../../services/ApiCalls";
 import { userData } from "../userSlice";
 import { Accordion } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
@@ -37,6 +37,7 @@ export const Admin = () =>{
 
     const [Modif, setModif] = useState(false);
     const [ModifCita, setModifCita] = useState(null);
+    const [dateConfirmation, setDateConfirmation] = useState(false);
 
 
     useEffect(() => {
@@ -60,6 +61,10 @@ export const Admin = () =>{
             })
         }
       }, []);
+
+      useEffect(() => {
+        console.log(appointmentData);
+      },[appointmentData]);
 
     const buttonHandlerPrev = () => {
         if (usersPage <= 1) {
@@ -162,6 +167,7 @@ export const Admin = () =>{
 
     const buttonHandlerModif = (id) => {
         setModif(!Modif);
+        setDateConfirmation(false);
 
         if (ModifCita === null) {
             setModifCita(id);
@@ -184,7 +190,34 @@ export const Admin = () =>{
           ...prevState,
           "shift": shift
         }));
+
+        if (appointmentData.date !== "") {
+            setDateConfirmation(true)
+        } else {
+            null
+        }
     };
+
+    const buttonHandlerModifAppointment = (idCita) => {
+        console.log(idCita);
+        modifAppointment(token, idCita, appointmentData).then((res) => {
+            setModifCita(null)
+            setModif(!Modif)
+            if (res.status === 202) {
+                getAppointmentsPaginated(token, citasPage, citasSkip).then((res)=> {
+                    setCitas(res.results);
+                    setCitasPage(res.page);
+                    setCitasSkip(res.skip);
+                    setCitasCount(res.count);
+                })
+            } else if (res.status !== 202) {
+                //futura gestión de errores por implementar
+                alert("Error modificando la cita")
+            }
+        });
+
+    };
+    
 
     return (
         <div className="adminPage">
@@ -262,7 +295,9 @@ export const Admin = () =>{
                             {decoded?.userRoles === "admin" ? (
                                 <div className="buttonCitas">
                                     {Modif !== false? (
-                                        <Button variant="success" onClick={() => buttonHandlerModif(Citas[i]?.id)}>ATRÁS</Button> 
+                                        
+                                        <Button variant="secondary" onClick={() => buttonHandlerModif(Citas[i]?.id)}>ATRÁS</Button>
+                                        
                                     ):null}
                                     {Modif === false? (
                                         <Button variant="success" onClick={() => buttonHandlerModif(Citas[i]?.id)}>MODIFICAR CITA</Button> 
@@ -272,34 +307,49 @@ export const Admin = () =>{
                             ): null }
                             
                             {Modif === true && ModifCita === Citas[i]?.id ? (
-                                <div className="appointmentForm">
-                                <Form.Group controlId="date">
-                                    <Form.Control
-                                        type="date"
-                                        name="date"
-                                        value={appointmentData.date}
-                                        onChange={dateHandler}
-                                    />
-                                </Form.Group>
-                                <Dropdown>
-                                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                                    Turno?
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="bg-dropdown">
-                                        <Dropdown.Item name="shift" value="morning" onClick={(e) => 
-                                        shiftHandler({shift: e.target.getAttribute("value")
-                                        })}
-                                        >Mañana</Dropdown.Item>
-                                        <Dropdown.Item name="shift" value="afternoon" onClick={(e) => 
-                                        shiftHandler({shift: e.target.getAttribute("value")
-                                        })}
-                                        >Tarde</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                
-                                <Button variant="danger" onClick={() => buttonHandlerDeleteCitas(Citas[i]?.id)} >ELIMINAR CITA</Button>
-                               
+                            <div className="appointmentForm">
+                                {dateConfirmation === false ? (
+                                    <div className="appointmentForm">
+                                    <Button variant="danger" onClick={() => buttonHandlerDeleteCitas(Citas[i]?.id)} >ELIMINAR CITA</Button>
+                                    <Form.Group controlId="date">
+                                        <Form.Control
+                                            type="date"
+                                            name="date"
+                                            value={appointmentData.date}
+                                            onChange={dateHandler}
+                                        />
+                                    </Form.Group>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                                        Turno?
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu className="bg-dropdown">
+                                            <Dropdown.Item name="shift" value="morning" onClick={(e) => 
+                                            shiftHandler({shift: e.target.getAttribute("value")
+                                            })}
+                                            >Mañana</Dropdown.Item>
+                                            <Dropdown.Item name="shift" value="afternoon" onClick={(e) => 
+                                            shiftHandler({shift: e.target.getAttribute("value")
+                                            })}
+                                            >Tarde</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    </div>
+                                ): null}
+                                {dateConfirmation === true ? (
+                                    <div className="confirmModification">
+                                        <h3 className="titleConfirmation">Modificar cita para el día {appointmentData.date} por la
+                                                    {appointmentData.shift === "morning" ? (" mañana "): null}
+                                                    {appointmentData.shift === "afternoon" ? (" tarde "): null}
+                                                   
+                                                </h3> 
 
+                                                <Button variant="success" 
+                                                onClick={() => buttonHandlerModifAppointment(Citas[i]?.id)} >Confirmar</Button>
+
+                                    </div>
+                                ): null}
+                               
                             </div>
 
                             ) : null}

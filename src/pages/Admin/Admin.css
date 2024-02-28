@@ -51,12 +51,17 @@
 .buttonCitas {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 0.5em;
-    
 }
-
-
 
 .appointmentForm {
     margin-top: 0.5em;
+}
+
+.confirmModification {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
 }

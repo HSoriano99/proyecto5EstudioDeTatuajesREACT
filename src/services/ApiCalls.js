@@ -128,3 +128,14 @@ export const createNewAppointment = async (token, appointmentData) => {
     return res;
 
 };
+
+export const modifAppointment = async (token, id, appointmentData) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.patch(`${API_URL}/api/appointments/update/${id}`, appointmentData, config);
+    return res;
+
+};
