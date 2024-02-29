@@ -39,7 +39,7 @@ export const NuestrosArtistas = () =>{
         getArtists().then((res) => {
             setArtists(res)
         })
-        if (token) {
+        if (decoded?.userRoles === "client" || decoded?.userRoles === "admin") {
              getClientProfile(token, id, page, skip).then((res) => {
             setAppointmentData((prevState) => ({
                 ...prevState,
