@@ -343,7 +343,6 @@ export const Admin = () =>{
 
                                                 <Button variant="success" 
                                                 onClick={() => buttonHandlerModifAppointment(Citas[i]?.id)} >Confirmar</Button>
-
                                     </div>
                                 ): null}
                                
@@ -363,8 +362,6 @@ export const Admin = () =>{
                             onClick={() => buttonHandlerNextCitas()}
                             >Next Page</Button></div>
                         </div>
-
-                    
 
                     </Accordion.Body>
                 </Accordion.Item>

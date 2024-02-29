@@ -384,8 +384,6 @@ export const Profile = () => {
                         onClick={() => buttonHandlerNextCitas()}
                         >Next Page</Button></div>
                 </div>
-
-             
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
