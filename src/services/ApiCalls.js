@@ -20,25 +20,25 @@ export const getArtists = async () => {
 
 };
 
-export const getClientProfile = async (token, id) => {
+export const getClientProfile = async (token, id, page, skip) => {
     const config = {
         headers: {
             Authorization: 'Bearer ' + token
         }
     }
-    const res = await axios.get(`${API_URL}/api/auth/getClientByUser/${id}`, config);
+    const res = await axios.get(`${API_URL}/api/auth/getClientByUser/${id}?page=${page}&skip=${skip}`, config);
     
     return res.data;
 
 };
 
-export const getArtistProfile = async (token, id) => {
+export const getArtistProfile = async (token, id, page, skip) => {
     const config = {
         headers: {
             Authorization: 'Bearer ' + token
         }
     }
-    const res = await axios.get(`${API_URL}/api/auth/getArtistByUser/${id}`, config);
+    const res = await axios.get(`${API_URL}/api/auth/getArtistByUser/${id}?page=${page}&skip=${skip}`, config);
     
     return res.data;
 

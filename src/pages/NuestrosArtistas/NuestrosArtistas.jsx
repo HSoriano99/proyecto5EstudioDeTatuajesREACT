@@ -30,6 +30,9 @@ export const NuestrosArtistas = () =>{
     const token = userRdxData.credentials.token;
     const id = userRdxData.credentials.userData?.userId;
     const decoded = userRdxData.credentials?.userData;
+
+    const page = 1
+    const skip = 10
     
 
     useEffect(() => {
@@ -37,7 +40,7 @@ export const NuestrosArtistas = () =>{
             setArtists(res)
         })
         if (token) {
-             getClientProfile(token, id).then((res) => {
+             getClientProfile(token, id, page, skip).then((res) => {
             setAppointmentData((prevState) => ({
                 ...prevState,
                 "client_id": res.id
@@ -202,7 +205,6 @@ export const NuestrosArtistas = () =>{
                                             </div>
                                         ): null}
                                         
-                                       
                                     </div>
 
                                 ): null }

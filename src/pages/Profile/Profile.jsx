@@ -22,7 +22,11 @@ export const Profile = () => {
   phone_number: "", tattoo_style: ""});
   const userRdxData = useSelector(userData);
   const dispatch = useDispatch();
+
   const [Citas, setCitas] = useState(false)
+  const [citasPage, setCitasPage] = useState(1);
+  const [citasSkip, setCitasSkip] = useState(3);
+  const [citasCount, setCitasCount] = useState();
 
   const token = userRdxData.credentials.token;
   const id = userRdxData.credentials.userData?.userId;
@@ -33,21 +37,88 @@ export const Profile = () => {
     if (!token) {
       navigate("/register");
     } else if (decoded?.userRoles === "client" || decoded?.userRoles === "admin"){
-      getClientProfile(token, id).then((res) => {
+      getClientProfile(token, id, citasPage, citasSkip).then((res) => {
         setProfileData(res);
-        if (res.appointment.length > 0) {
+        setCitasPage(res.page);
+        setCitasSkip(res.skip);
+        setCitasCount(res.count);
+        if (res.results?.length > 0) {
           setCitas(true)
         }
       });
     } else {
-      getArtistProfile(token, id).then((res) => {
+      getArtistProfile(token, id, citasPage, citasSkip).then((res) => {
         setProfileData(res);
-        if (res.appointment.length > 0) {
+        setCitasPage(res.page);
+        setCitasSkip(res.skip);
+        setCitasCount(res.count);
+        if (res.results?.length > 0) {
           setCitas(true)
         }
       })
     }
   }, []);
+
+  const buttonHandlerPrevCitas = () => {
+    if (citasPage <= 1) {
+        null
+    } else if (decoded?.userRoles === "client" || decoded?.userRoles === "admin"){
+        const page = citasPage - 1;
+
+        getClientProfile(token, id, page, citasSkip).then((res) => {
+          setProfileData(res);
+          setCitasPage(res.page);
+          setCitasSkip(res.skip);
+          setCitasCount(res.count);
+          if (res.results?.length > 0) {
+            setCitas(true)
+          }
+        });
+
+    } else {
+      const page = citasPage - 1;
+
+      getArtistProfile(token, id, page, citasSkip).then((res) => {
+        setProfileData(res);
+        setCitasPage(res.page);
+        setCitasSkip(res.skip);
+        setCitasCount(res.count);
+        if (res.results?.length > 0) {
+          setCitas(true)
+        }
+      })
+    }
+  }
+
+  const buttonHandlerNextCitas = () => {
+    if (citasSkip * citasPage >= citasCount) {
+        null
+    } else if (decoded?.userRoles === "client" || decoded?.userRoles === "admin"){
+        const page = citasPage + 1;
+
+        getClientProfile(token, id, page, citasSkip).then((res) => {
+          setProfileData(res);
+          setCitasPage(res.page);
+          setCitasSkip(res.skip);
+          setCitasCount(res.count);
+          if (res.results?.length > 0) {
+            setCitas(true)
+          }
+        });
+    } else {
+      const page = citasPage + 1;
+
+      getArtistProfile(token, id, page, citasSkip).then((res) => {
+        setProfileData(res);
+        setCitasPage(res.page);
+        setCitasSkip(res.skip);
+        setCitasCount(res.count);
+        if (res.results?.length > 0) {
+          setCitas(true)
+        }
+      })
+    }
+}
    
 
   const buttonHandlerEdit = () => {
@@ -253,21 +324,21 @@ export const Profile = () => {
             <Accordion.Body key="body">
               {decoded?.userRoles === "client" ? (
                  <div className="citasCards">
-                 {profileData.appointment.map((appointment, index) => {
+                 {profileData.results.map((appointment, index) => {
                    return (
                     <div className="cita" key={"cita" + index}>
                      <ListGroup>
                        <ListGroup.Item key="nombre" >
-                         Artista: {profileData.appointment[index]?.artist.first_name}
+                         Artista: {profileData.results[index]?.artist.first_name}
                        </ListGroup.Item>
                        <ListGroup.Item key="fecha">
-                         Fecha: {profileData.appointment[index]?.date}
+                         Fecha: {profileData.results[index]?.date}
                        </ListGroup.Item>
                        <ListGroup.Item key="turno">
-                         Turno: {profileData.appointment[index]?.shift}
+                         Turno: {profileData.results[index]?.shift}
                        </ListGroup.Item>
                        <ListGroup.Item key="estilo">
-                         Tatuaje: {profileData.appointment[index]?.artist.tattoo_style}
+                         Tatuaje: {profileData.results[index]?.artist.tattoo_style}
                        </ListGroup.Item>
                      </ListGroup>
                      <br></br>
@@ -280,21 +351,21 @@ export const Profile = () => {
               ) : null}
               {decoded?.userRoles === "artist" ? (
                  <div className="citasCards">
-                 {profileData.appointment.map((appointment, index) => {
+                 {profileData.results.map((appointment, index) => {
                    return (
                     <div className="cita" key={"cita" + index}>
                      <ListGroup key={"cita" + index}>
                        <ListGroup.Item key="nombre" >
-                         Cliente: {profileData.appointment[index]?.client.first_name}
+                         Cliente: {profileData.results[index]?.client.first_name}
                        </ListGroup.Item>
                        <ListGroup.Item key="clientPhone">
-                         Tlf. cliente: {profileData.appointment[index]?.client.phone_number}
+                         Tlf. cliente: {profileData.results[index]?.client.phone_number}
                        </ListGroup.Item>
                        <ListGroup.Item key="fecha">
-                         Fecha: {profileData.appointment[index]?.date}
+                         Fecha: {profileData.results[index]?.date}
                        </ListGroup.Item>
                        <ListGroup.Item key="turno">
-                         Turno: {profileData.appointment[index]?.shift}
+                         Turno: {profileData.results[index]?.shift}
                        </ListGroup.Item>
                      </ListGroup>
                      <br></br>
@@ -304,6 +375,16 @@ export const Profile = () => {
                  </div>
 
               ) : null}
+
+                <div className="buttonsDivSip">
+                    <div className="buttonPage"><Button variant="secondary"
+                        onClick={() => buttonHandlerPrevCitas()}
+                        >Prev Page</Button></div>
+                    <div className="buttonPage"><Button variant="primary"
+                        onClick={() => buttonHandlerNextCitas()}
+                        >Next Page</Button></div>
+                </div>
+
              
             </Accordion.Body>
           </Accordion.Item>

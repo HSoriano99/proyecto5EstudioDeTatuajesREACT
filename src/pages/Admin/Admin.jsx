@@ -62,9 +62,6 @@ export const Admin = () =>{
         }
       }, []);
 
-      useEffect(() => {
-        console.log(appointmentData);
-      },[appointmentData]);
 
     const buttonHandlerPrev = () => {
         if (usersPage <= 1) {
