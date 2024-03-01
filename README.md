@@ -1,13 +1,9 @@
 # Front Estudio de tatuajes REACT.JS
 
-<div align="center" width=840em>
-  <img src="./src/img/LoginRegister.png" width=180em>
-  <img src="./src/img/TattooStudio.jpeg" width=480em>
-  <img src="./src/img/NewCita2.png" width=180em>
-  
+<div align="center">
+  <img src="./src/img/TattooStudio.jpeg" width=500em>
+  <h1>Héctor's Tattoo Shop</h1>
 </div>
-
-<h1 align="center">Héctor's Tattoo Shop</h1>
 
 <details>
   <summary>Contenido 📝</summary>
