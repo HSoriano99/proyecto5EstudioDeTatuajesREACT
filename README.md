@@ -46,7 +46,6 @@ Tecnologías utilizadas:
 
 ## Funcionalidades
 
-<<<<<<< HEAD
   <div>
     <img src="./src/img/LoginRegister.png" width=180em>
     <img src="./src/img/LoginForm.png" width=180em>
@@ -69,21 +68,10 @@ Tecnologías utilizadas:
     <img src="./src/img/NewCita1.png" width=180em>
     <img src="./src/img/NewCita2.png" width=180em>
   </div>
-=======
-<details>
-  <summary>Cliente 🙋🏽‍♂️</summary>
-  <ol>
-    <li><a >🔐 Registro / Login</a></li>
-    <li><a >📝 Editar datos de perfil</a></li>
-    <li><a >👀 Consultar sus citas concertadas con información del artista</a></li>
-    <li><a >💉📆 Ver los artistas disponibles y crear citas nuevas</a></li>
-  </ol>
->>>>>>> ff5b063f82a97b08a97045f9f7631fa982cc91e4
 </details>
 <details>
   <summary>Artista 🦹🏼</summary>
   <ol>
-<<<<<<< HEAD
     <li>🔐 Login</li>
     <li>📝 Editar datos de perfil</li>
     <li>👀 Consultar sus citas concertadas con información del cliente</li>
@@ -92,17 +80,10 @@ Tecnologías utilizadas:
     <img src="./src/img/ArtistProfile.png" width=180em>
     <img src="./src/img/Citasartist.png" width=180em>
   </div>
-=======
-    <li><a >🔐 Login</a></li>
-    <li><a >📝 Editar datos de perfil</a></li>
-    <li><a >👀 Consultar sus citas concertadas con información del cliente</a></li>
-  </ol>
->>>>>>> ff5b063f82a97b08a97045f9f7631fa982cc91e4
 </details>
 <details>
   <summary>Admin 🕵🏻‍♂️</summary>
   <ol>
-<<<<<<< HEAD
     <li>🔐 Login</li>
     <li>📝 Editar datos de perfil</li>
     <li>🔎 Consultar todos los usuarios de la aplicación y posibilidad de eliminar usuarios</li>
@@ -115,22 +96,8 @@ Tecnologías utilizadas:
     <img src="./src/img/ModifCitas.png" width=180em>
     <img src="./src/img/ModifCitas2.png" width=180em>
   </div>
-
 </details>
 
-=======
-    <li><a >🔐 Login</a></li>
-    <li><a >📝 Editar datos de perfil</a></li>
-    <li><a >🔎 Consultar todos los usuarios de la aplicación y posibilidad de eliminar usuarios</a></li>
-    <li><a >🔎📝 Consultar todas las citas de la aplicación y posibilidad de modificarlas o eliminarlas</a></li>
-  </ol>
-</details>
-
-
-
-
-
->>>>>>> ff5b063f82a97b08a97045f9f7631fa982cc91e4
 
 ## Puesta en marcha
 
