@@ -6,6 +6,7 @@
     <li><a href="#objetivo">Objetivo</a></li>
     <li><a href="#sobre-el-proyecto">Sobre el proyecto</a></li>
     <li><a href="#stack">Stack</a></li>
+    <li><a href="#funcionalidades">Funcionalidades</a></li>
     <li><a href="#instalación-en-local">Instalación</a></li>
     <li><a href="#futuras-funcionalidades">Futuras funcionalidades</a></li>
     <li><a href="#contribuciones">Contribuciones</a></li>
@@ -39,6 +40,39 @@ Tecnologías utilizadas:
 - NODE.JS
 - TYPESCRIPT
 - TYPEORM
+
+## Funcionalidades
+
+<details>
+  <summary>Cliente 🙋🏽‍♂️</summary>
+  <ol>
+    <li><a >🔐 Registro / Login</a></li>
+    <li><a >📝 Editar datos de perfil</a></li>
+    <li><a >👀 Consultar sus citas concertadas con información del artista</a></li>
+    <li><a >💉📆 Ver los artistas disponibles y crear citas nuevas</a></li>
+  </ol>
+</details>
+<details>
+  <summary>Artista 🦹🏼</summary>
+  <ol>
+    <li><a >🔐 Login</a></li>
+    <li><a >📝 Editar datos de perfil</a></li>
+    <li><a >👀 Consultar sus citas concertadas con información del cliente</a></li>
+  </ol>
+</details>
+<details>
+  <summary>Admin 🕵🏻‍♂️</summary>
+  <ol>
+    <li><a >🔐 Login</a></li>
+    <li><a >📝 Editar datos de perfil</a></li>
+    <li><a >🔎 Consultar todos los usuarios de la aplicación y posibilidad de eliminar usuarios</a></li>
+    <li><a >🔎📝 Consultar todas las citas de la aplicación y posibilidad de modificarlas o eliminarlas</a></li>
+  </ol>
+</details>
+
+
+
+
 
 
 ## Puesta en marcha
