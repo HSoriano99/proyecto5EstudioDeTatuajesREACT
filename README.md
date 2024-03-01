@@ -53,7 +53,7 @@ Tecnologías utilizadas:
   <div>
     <img src="./src/img/LoginRegister.png" width=180em>
     <img src="./src/img/LoginForm.png" width=180em>
-    <img src="./src/img/RegisterForm.png" width=180em>
+    <img src="./src/img/Registerform.png" width=180em>
   </div>
 
 
