@@ -291,7 +291,7 @@ export const Admin = () =>{
                    
                             {decoded?.userRoles === "admin" ? (
                                 <div className="buttonCitas">
-                                    {Modif !== false? (
+                                    {Modif !== false && ModifCita === Citas[i]?.id? (
                                         
                                         <Button variant="secondary" onClick={() => buttonHandlerModif(Citas[i]?.id)}>ATRÁS</Button>
                                         
