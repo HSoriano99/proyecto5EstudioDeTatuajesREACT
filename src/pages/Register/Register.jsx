@@ -40,6 +40,8 @@ export const Register = () => {
       email: registerData.email,
       password: registerData.password,
     };
+     if (registerData.password !== "" && registerData.email !== "" && registerData.username !== ""
+     && registerData.first_name !== ""  && registerData.phone_number !== "" ){
 
     clientRegister(registerData).then(() => {
 
@@ -59,10 +61,12 @@ export const Register = () => {
 
       })
 
-      .catch((err) => setSmShow(true));
+      .catch((err) => console.error("Ha ocurrido un error en el login", err));
     })
+  }else {
+    setSmShow(true)
+  }
 
-    .catch((err) => setSmShow(true));
 
    
   };
