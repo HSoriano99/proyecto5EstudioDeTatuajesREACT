@@ -7,10 +7,12 @@ import { clientRegister, userLogin } from "../../services/ApiCalls";
 import { login, userData } from "../userSlice";
 import "./Register.css";
 import Button from "react-bootstrap/Button";
+import Modal from 'react-bootstrap/Modal';
 
 export const Register = () => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [smShow, setSmShow] = useState(false);
   const [registerData, setRegisterData] = useState({
     username: "",
     email: "",
@@ -57,8 +59,10 @@ export const Register = () => {
 
       })
 
-      .catch((err) => console.error("ha ocurrido un error", err));
-    });
+      .catch((err) => setSmShow(true));
+    })
+
+    .catch((err) => setSmShow(true));
 
    
   };
@@ -108,6 +112,25 @@ export const Register = () => {
       <br></br>
 
       <Button variant="dark" onClick={() => buttonHandler()} >CREAR PERFIL</Button>
+
+      <div className="modal">
+            <Modal
+                size="sm"
+                show={smShow}
+                onHide={() => setSmShow(false)}
+                aria-labelledby="example-modal-sizes-title-sm"
+            >
+                <Modal.Header closeButton>
+                <Modal.Title id="example-modal-sizes-title-sm">
+                    Error al registrarse!
+                </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Ha ocurrido un error, prueba a completar todos los campos
+                </Modal.Body>
+               
+            </Modal>
+        </div>
       
     </div>
   );

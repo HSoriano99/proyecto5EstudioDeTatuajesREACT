@@ -7,9 +7,11 @@ import { login, userData } from "../userSlice";
 import { useNavigate } from "react-router-dom";
 import "./Login.css"
 import Button from "react-bootstrap/Button";
+import Modal from 'react-bootstrap/Modal';
 
 export const Login = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [smShow, setSmShow] = useState(false);
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -40,7 +42,7 @@ export const Login = () => {
         dispatch(login({ credentials: data }));
         navigate("/profile");
       })
-      .catch((err) => console.error("ha ocurrido un error", err));
+      .catch((err) => setSmShow(true));
   };
 
   return (
@@ -69,7 +71,24 @@ export const Login = () => {
       </div>
       <br></br>
       <Button variant="dark" onClick={() => buttonHandler()} >LOG IN</Button>
-      
+      <div className="modal">
+            <Modal
+                size="sm"
+                show={smShow}
+                onHide={() => setSmShow(false)}
+                aria-labelledby="example-modal-sizes-title-sm"
+            >
+                <Modal.Header closeButton>
+                <Modal.Title id="example-modal-sizes-title-sm">
+                    Credenciales incorrectas!
+                </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Email o contraseña incorrectas, prueba de nuevo
+                </Modal.Body>
+               
+            </Modal>
+        </div>
     </div>
   );
 };

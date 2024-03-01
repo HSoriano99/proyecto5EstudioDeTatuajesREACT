@@ -78,7 +78,7 @@ Tecnologías utilizadas:
   </ol>
   <div >
     <img src="./src/img/ArtistProfile.png" width=180em>
-    <img src="./src/img/Citasartist.png" width=180em>
+    <img src="./src/img/CitasArtist.png" width=180em>
   </div>
 </details>
 <details>
